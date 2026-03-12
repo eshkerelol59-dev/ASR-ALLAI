@@ -1374,15 +1374,63 @@ const POLL_MODELS = {
   'perplexity/llama-3.1-sonar-large-128k-online': 'searchgpt',
 };
 
+// Free AI via Pollinations
+async function callAI(msgs, model) {
+  const pollModel = POLL_MODELS[model] || 'openai';
+
+  // Attempt 1: Pollinations GET endpoint (most reliable, no CORS issues)
+  try {
+    const lastUser = msgs.filter(m=>m.role==='user').pop();
+    const prompt = typeof lastUser?.content==='string' ? lastUser.content : (lastUser?.content?.find?.(c=>c.type==='text')?.text || 'Hello');
+    const sysMsg = msgs.find(m=>m.role==='system');
+    const url = `https://text.pollinations.ai/${encodeURIComponent(prompt)}` +
+      `?model=${encodeURIComponent(pollModel)}` +
+      (sysMsg ? `&system=${encodeURIComponent(sysMsg.content)}` : '') +
+      `&seed=${Math.floor(Math.random()*99999)}`;
+    const r = await fetch(url);
+    if (r.ok) {
+      const txt = await r.text();
+      if (txt && txt.trim().length > 0) return txt.trim();
+    }
+  } catch(e) {}
+
+  // Attempt 2: Pollinations OpenAI-compatible POST
+  try {
+    const r = await fetch('https://api.pollinations.ai/v1/chat/completions', {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({model: pollModel, messages: msgs})
+    });
+    if (r.ok) {
+      const j = await r.json();
+      const txt = j?.choices?.[0]?.message?.content;
+      if (txt && txt.trim()) return txt.trim();
+    }
+  } catch(e) {}
+
+  // Attempt 3: Pollinations main POST
+  try {
+    const r = await fetch('https://text.pollinations.ai/', {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({messages: msgs, model: pollModel, stream: false})
+    });
+    if (r.ok) {
+      const txt = await r.text();
+      if (txt && txt.trim().length > 2) return txt.trim();
+    }
+  } catch(e) {}
+
+  throw new Error('AI недоступен. Проверьте интернет-соединение.');
+}
+
 async function sendMsg(){
   const inp=document.getElementById('chat-in'), btn=document.getElementById('send-btn');
   const txt=inp.value.trim(); if(!txt&&uploadedImgs.length===0) return;
   inp.value=''; btn.disabled=true;
   const snap=[...uploadedImgs], urls=snap.map(i=>i.url);
-  // Build message content
   let userContent;
   if(snap.length>0){
-    // Images: send as multipart
     userContent=[]; snap.forEach(img=>userContent.push({type:'image_url',image_url:{url:`data:${img.type};base64,${img.b64}`}}));
     userContent.push({type:'text',text:txt||(snap.length>1?'Compare these images.':'What do you see?')});
     addMsg('user',txt||snap.length+' image(s)',urls); clearImgs();
@@ -1395,17 +1443,7 @@ async function sendMsg(){
   if(currentMode==='search') addMsg('search-note',t('searching'));
   const tEl=addMsg('ai','...'); tEl.className='msg ai typing';
   try{
-    // Use Pollinations free text API
-    const pollModel = POLL_MODELS[selectedModel] || 'openai';
-    const payload = { messages: msgs, model: pollModel, stream: false, seed: -1, jsonMode: false };
-    const resp = await fetch('https://text.pollinations.ai/', {
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body: JSON.stringify(payload)
-    });
-    if(!resp.ok) throw new Error('HTTP '+resp.status+': '+resp.statusText);
-    const ans = await resp.text();
-    if(!ans||ans.trim()==='') throw new Error('Empty response');
+    const ans = await callAI(msgs, selectedModel);
     chatHistory.push({role:'assistant',content:ans});
     tEl.className='msg ai'; tEl.innerHTML='';
     const sp=document.createElement('span'); sp.textContent=ans; tEl.appendChild(sp);
