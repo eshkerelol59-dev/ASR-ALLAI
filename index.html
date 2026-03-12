@@ -32,25 +32,33 @@
   --auth-bg:  radial-gradient(ellipse at 50% 0%,#1a0a2e 0%,#080810 70%);
 }
 body.light {
-  --bg:       #f4f4f8;
+  --bg:       #faf8f5;
   --bg2:      #ffffff;
-  --bg3:      #eeeef5;
-  --bg4:      #e0e0ec;
-  --border:   #d0d0e0;
-  --border2:  #c0c0d8;
-  --text:     #1a1a2e;
-  --text2:    #444466;
-  --text3:    #888899;
-  --text4:    #aaaacc;
-  --accent:   #e94560;
-  --accent2:  #c73652;
-  --green:    #00aa44;
-  --blue:     #2563eb;
-  --chat-user:#dbeafe;
-  --chat-ai:  #f0f0f8;
-  --code-bg:  #f8f8fc;
-  --code-bg2: #f0f0f8;
-  --auth-bg:  radial-gradient(ellipse at 50% 0%,#e8e0f8 0%,#f4f4f8 70%);
+  --bg3:      #f2ede8;
+  --bg4:      #e8e0d8;
+  --border:   #ddd5cc;
+  --border2:  #ccc4bb;
+  --text:     #2d2418;
+  --text2:    #5c4a38;
+  --text3:    #8c7a6a;
+  --text4:    #b0a090;
+  --accent:   #c0392b;
+  --accent2:  #a93226;
+  --green:    #27ae60;
+  --blue:     #2471a3;
+  --chat-user:#fde8d8;
+  --chat-ai:  #f5f0eb;
+  --code-bg:  #fdf9f5;
+  --code-bg2: #f5efe8;
+  --auth-bg:  radial-gradient(ellipse at 50% 0%,#f5e6d8 0%,#faf8f5 70%);
+}
+body.light {
+  font-family: 'Georgia', serif;
+}
+body.light .topbar,
+body.light .tabs,
+body.light .header-strip {
+  font-family: 'Courier New', monospace;
 }
 
 body{background:var(--bg);color:var(--text);font-family:'Courier New',monospace;min-height:100vh;transition:background .3s,color .3s;}
@@ -373,38 +381,78 @@ select{background:var(--bg3);color:var(--text);border:1px solid #222244;font-fam
 .av-red{background:#e94560;}.av-purple{background:#7c3aed;}.av-blue{background:#2563eb;}.av-green{background:#059669;}.av-orange{background:#d97706;}.av-pink{background:#db2777;}.av-cyan{background:#0891b2;}.av-lime{background:#65a30d;}
 
 /* ═══ LIGHT THEME FIXES ═══ */
-body.light .msg.user{color:#1a1a2e;}
-body.light .msg.ai{color:#1a1a2e;border-left-color:var(--accent);}
-body.light .msg.sys-note{background:#e8f8ee;color:#00aa44;border-left-color:#00aa44;}
-body.light .msg.search-note{background:#e8eeff;color:#2563eb;border-left-color:#2563eb;}
-body.light #code-ed{color:#1a1a2e;background:var(--code-bg2);}
-body.light #out-box{color:#007700;background:var(--code-bg);}
-body.light .r-out{color:#007700;}
+body.light .msg.user{color:#2d2418;background:#fde8d8;border-bottom-right-radius:2px;}
+body.light .msg.ai{color:#2d2418;background:#f5f0eb;border-left-color:var(--accent);}
+body.light .msg.sys-note{background:#e8f5ee;color:#27ae60;border-left-color:#27ae60;}
+body.light .msg.search-note{background:#e8f0f8;color:#2471a3;border-left-color:#2471a3;}
+body.light #chat-box{background:#fdf9f5;border-color:var(--border);}
+body.light #comm-box{background:#fdf9f5;border-color:var(--border);}
+body.light #code-ed{color:#2d2418;background:var(--code-bg2);border-color:var(--border2);}
+body.light #out-box{color:#1a6b30;background:var(--code-bg);}
+body.light .r-out{color:#1a6b30;}
 body.light .r-in{color:var(--accent);}
-body.light .r-err{color:#cc0000;}
-body.light .r-info{color:#888899;}
-body.light #git-term{background:var(--code-bg);}
-body.light .gc{color:#c75000;}
-body.light .go{color:#007700;}
-body.light .ge{color:#cc0000;}
-body.light .gi{color:#888899;}
+body.light .r-err{color:#c0392b;}
+body.light .r-info{color:#8c7a6a;}
+body.light #git-term{background:var(--code-bg);border-color:var(--border2);}
+body.light .gc{color:#c0392b;}
+body.light .go{color:#1a6b30;}
+body.light .ge{color:#c0392b;}
+body.light .gi{color:#8c7a6a;}
+body.light .git-prompt-lbl, body.light .git-pr{color:#c0392b;}
 body.light .comm-bubble{background:var(--bg3);color:var(--text);}
-body.light .comm-msg.own .comm-bubble{background:#dbeafe;color:#1a1a2e;}
-body.light .auth-tab{background:var(--bg3);color:var(--text3);}
-body.light .auth-tab.active{background:var(--bg2);color:var(--text);}
-body.light .auth-panel{background:var(--bg2);}
-body.light select{background:var(--bg3);color:var(--text);}
-body.light .sett-in, body.light .sett-ta{background:var(--bg3);color:var(--text);}
-body.light .cpw-in{background:var(--bg);color:var(--text);}
-body.light .modal{background:var(--bg2);}
+body.light .comm-msg.own .comm-bubble{background:#fde8d8;color:#2d2418;}
+body.light .auth-tab{background:var(--bg3);color:var(--text3);border-color:var(--border);}
+body.light .auth-tab.active{background:var(--bg2);color:var(--text);border-bottom-color:var(--accent);}
+body.light .auth-panel{background:var(--bg2);border-color:var(--border);}
+body.light .auth-field input{background:var(--bg3);color:var(--text);border-color:var(--border2);}
+body.light select{background:var(--bg3);color:var(--text);border-color:var(--border2);}
+body.light .sett-in, body.light .sett-ta{background:var(--bg3);color:var(--text);border-color:var(--border2);}
+body.light .cpw-in{background:var(--bg3);color:var(--text);}
+body.light .modal{background:var(--bg2);border-color:var(--border2);}
 body.light .modal-header{background:var(--bg3);}
 body.light #repl-box{background:var(--code-bg);}
 body.light .repl-row{background:var(--code-bg);}
+body.light .repl-pr{background:var(--code-bg2);color:var(--accent);}
 body.light #repl-in{background:var(--code-bg);color:var(--text);}
-body.light .con-wrap{background:var(--code-bg);}
-body.light #git-term .go{color:#007700;}
-body.light .topbar{background:var(--bg2);}
-body.light .tabs{background:var(--bg2);}
+body.light .con-wrap{background:var(--code-bg);border-top-color:var(--accent);}
+body.light .con-header{background:var(--code-bg2);}
+body.light .ed-toolbar{background:var(--bg3);border-color:var(--border2);}
+body.light .topbar{background:var(--bg2);border-color:var(--border);}
+body.light .header-strip{background:var(--bg3);border-color:var(--border);}
+body.light .tabs{background:var(--bg2);border-color:var(--border);}
+body.light .tab{background:var(--bg2);color:var(--text3);border-color:var(--border);}
+body.light .tab.active{background:var(--bg);color:var(--text);border-bottom-color:var(--accent);}
+body.light .panel{background:var(--bg);border-color:var(--border);}
+body.light .badge{background:var(--bg3);border-color:var(--border);color:var(--text3);}
+body.light .mode-btn{background:var(--bg3);border-color:var(--border2);color:var(--text3);}
+body.light .mode-btn.active{background:#fde8d8;border-color:var(--accent);color:var(--text);}
+body.light .mode-desc{background:var(--bg3);border-color:var(--border);color:var(--text2);}
+body.light .rating-bar{background:var(--bg3);border-color:var(--border);}
+body.light .ml-toggle{background:var(--bg3);border-color:var(--border2);color:var(--text3);}
+body.light .model-list{background:var(--bg2);border-color:var(--border2);}
+body.light .model-item{border-bottom-color:var(--border);}
+body.light .model-item:hover{background:var(--bg3);}
+body.light .model-item.selected{background:#fde8d8;}
+body.light .ml-sort-row{background:var(--bg3);}
+body.light .chat-row input,.comm-row input,#git-in,#repl-in{background:var(--bg3);color:var(--text);}
+body.light .tool-btn,.ed-btn,.gq,.ki-tab,.git-stab,.lang-btn,.cmb{background:var(--bg3);color:var(--text3);border-color:var(--border2);}
+body.light .ki-tab.active,.git-stab.active{background:#fde8d8;border-color:var(--accent);color:var(--text);}
+body.light .lang-btn.active{background:#fde8d8;border-color:var(--accent);color:var(--text);}
+body.light .drop-zone{border-color:var(--border2);color:var(--text4);}
+body.light .user-pill{background:var(--bg3);border-color:var(--border2);}
+body.light .logout-btn{color:var(--text3);border-color:var(--border2);}
+body.light .theme-btn{border-color:var(--border2);}
+body.light .stat-box{background:var(--bg3);border-color:var(--border);}
+body.light .admin-panel{background:var(--bg3);}
+body.light .sett-sec-title{border-bottom-color:var(--border);}
+body.light .sett-preview{background:var(--bg3);border-color:var(--border);}
+body.light .imb{background:var(--bg3);border-color:var(--border2);color:var(--text3);}
+body.light .imb.active{background:#fde8d8;border-color:var(--accent);}
+body.light .chip{background:var(--bg3);border-color:var(--border2);color:var(--text3);}
+body.light .size-row select{background:var(--bg3);}
+body.light .img-res{background:var(--bg3);border-color:var(--border);}
+body.light .git-status-bar .gsp{opacity:.9;}
+body.light .topbar-logo{color:var(--accent);}
 
 /* ═══ RESPONSIVE ═══ */
 @media (max-width: 600px) {
@@ -848,9 +896,14 @@ body.light .tabs{background:var(--bg2);}
       <div id="admin-section" style="display:none;margin-top:20px;">
         <div class="admin-panel">
           <div class="admin-panel-title">👑 ADMIN PANEL</div>
-          <div style="display:flex;gap:8px;margin-bottom:10px;">
-            <button class="ed-btn" style="flex:1;" onclick="adminLoadUsers()">👥 Load Users</button>
+          <div style="display:flex;gap:8px;margin-bottom:10px;flex-wrap:wrap;">
+            <button class="ed-btn" style="flex:1;" onclick="adminLoadUsers()">👥 Users</button>
             <button class="ed-btn" style="flex:1;" onclick="adminClearBanned()">🔓 Unban All</button>
+          </div>
+          <div style="display:flex;gap:6px;margin-bottom:10px;">
+            <input class="sett-in" id="admin-grant-user" type="text" placeholder="Username to grant/revoke admin..." style="flex:1;padding:7px 10px;font-size:11px;">
+            <button class="ed-btn" onclick="adminGrantAdmin()" style="white-space:nowrap;color:#f97316;border-color:#f9731644;">👑 Grant</button>
+            <button class="ed-btn" onclick="adminRevokeAdmin()" style="white-space:nowrap;color:#ff4466;border-color:#ff446644;">✕ Revoke</button>
           </div>
           <div id="admin-user-list" style="max-height:200px;overflow-y:auto;"></div>
         </div>
@@ -1237,6 +1290,7 @@ function loginUser(user){
   loadSettingsPanel();
   initPubNub();
   loadBannedFromCloud();
+  loadAdminsFromCloud();
   applyI18n();
   setInterval(()=>syncUserData(), 30000);
 }
@@ -2059,6 +2113,55 @@ function scrollCommBox(){ const b=document.getElementById('comm-box'); if(b) b.s
 // ═══════════════════════════════════════════
 //  ADMIN FUNCTIONS
 // ═══════════════════════════════════════════
+// Dynamic admin list stored in localStorage + cloud
+function getDynamicAdmins(){
+  try{ return JSON.parse(localStorage.getItem('aistudio_admins')||'[]'); }catch(e){ return []; }
+}
+function saveDynamicAdmins(list){
+  localStorage.setItem('aistudio_admins', JSON.stringify(list));
+  try{ puter.kv.set('aistudio_admins', JSON.stringify(list)); }catch(e){}
+}
+async function loadAdminsFromCloud(){
+  try{
+    const v = await puter.kv.get('aistudio_admins');
+    if(v){ const list=JSON.parse(v); localStorage.setItem('aistudio_admins',JSON.stringify(list)); }
+  }catch(e){}
+}
+// Override isAdmin to also check dynamic list
+function isAdmin(u){
+  const base = ADMIN_USERS.includes((u||'').toLowerCase());
+  const dynamic = getDynamicAdmins().includes((u||'').toLowerCase());
+  return base || dynamic;
+}
+
+function adminGrantAdmin(){
+  const uname = document.getElementById('admin-grant-user')?.value?.trim().toLowerCase();
+  if(!uname){ return; }
+  const accs = lsAccounts();
+  if(!accs[uname]){ alert('User "'+uname+'" not found'); return; }
+  const list = getDynamicAdmins();
+  if(!list.includes(uname)) list.push(uname);
+  saveDynamicAdmins(list);
+  document.getElementById('admin-grant-user').value='';
+  adminLoadUsers();
+  const msg=document.getElementById('sett-saved');
+  msg.textContent='👑 '+uname+' is now admin!'; msg.style.color='#f97316';
+  setTimeout(()=>msg.textContent='',2500);
+}
+
+function adminRevokeAdmin(){
+  const uname = document.getElementById('admin-grant-user')?.value?.trim().toLowerCase();
+  if(!uname){ return; }
+  if(ADMIN_USERS.includes(uname)){ alert('Cannot revoke base admin!'); return; }
+  const list = getDynamicAdmins().filter(u=>u!==uname);
+  saveDynamicAdmins(list);
+  document.getElementById('admin-grant-user').value='';
+  adminLoadUsers();
+  const msg=document.getElementById('sett-saved');
+  msg.textContent='✕ '+uname+' admin revoked'; msg.style.color='#ff4466';
+  setTimeout(()=>msg.textContent='',2500);
+}
+
 function getBannedUsers(){ try{ return JSON.parse(localStorage.getItem('aistudio_banned')||'[]'); }catch(e){ return []; } }
 function saveBannedUsers(list){ localStorage.setItem('aistudio_banned', JSON.stringify(list)); }
 function isUserBanned(u){ return getBannedUsers().includes(u.toLowerCase()); }
@@ -2082,6 +2185,12 @@ function adminUnbanUser(username){
   adminLoadUsers();
 }
 
+function adminRevokeAdminDirect(uname){
+  if(ADMIN_USERS.includes(uname.toLowerCase())){ alert('Cannot revoke base admin!'); return; }
+  const list = getDynamicAdmins().filter(u=>u!==uname.toLowerCase());
+  saveDynamicAdmins(list);
+  adminLoadUsers();
+}
 function adminClearBanned(){
   saveBannedUsers([]);
   try{ puter.kv.set('aistudio_banned', JSON.stringify([])); }catch(e){}
