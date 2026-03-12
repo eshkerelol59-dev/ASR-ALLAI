@@ -56,8 +56,8 @@ body.light {
 body{background:var(--bg);color:var(--text);font-family:'Courier New',monospace;min-height:100vh;transition:background .3s,color .3s;}
 
 /* ═══ AUTH ═══ */
-#auth-screen{display:flex;align-items:center;justify-content:center;min-height:100vh;padding:20px;background:var(--auth-bg);}
-.auth-box{width:380px;}
+#auth-screen{display:flex;align-items:center;justify-content:center;min-height:100vh;padding:16px;background:var(--auth-bg);}
+.auth-box{width:100%;max-width:400px;}
 .auth-logo{text-align:center;margin-bottom:28px;}
 .auth-logo .logo-big{font-size:30px;color:#e94560;display:block;letter-spacing:3px;margin-bottom:6px;}
 .auth-logo .logo-sub{font-size:10px;color:var(--text3);letter-spacing:4px;}
@@ -81,8 +81,8 @@ body{background:var(--bg);color:var(--text);font-family:'Courier New',monospace;
 .auth-sync-note{font-size:10px;color:#336633;text-align:center;margin-top:6px;line-height:1.5;padding:6px;background:#0a180a;border-radius:4px;border:1px solid #1a3a1a;}
 
 /* ═══ APP ═══ */
-#app-screen{display:none;flex-direction:column;align-items:center;min-height:100vh;padding:20px 0;}
-.container{width:500px;}
+#app-screen{display:none;flex-direction:column;align-items:center;min-height:100vh;padding:16px 0;}
+.container{width:100%;max-width:560px;padding:0 12px;}
 .topbar{display:flex;align-items:center;gap:8px;padding:8px 12px;background:var(--bg2);border:1px solid var(--border);border-bottom:none;border-radius:6px 6px 0 0;}
 .topbar-logo{color:#e94560;font-size:10px;letter-spacing:3px;flex:1;}
 .user-pill{display:flex;align-items:center;gap:7px;padding:4px 10px;background:var(--bg3);border:1px solid #222244;border-radius:20px;cursor:pointer;transition:all .2s;}
@@ -405,6 +405,65 @@ body.light .con-wrap{background:var(--code-bg);}
 body.light #git-term .go{color:#007700;}
 body.light .topbar{background:var(--bg2);}
 body.light .tabs{background:var(--bg2);}
+
+/* ═══ RESPONSIVE ═══ */
+@media (max-width: 600px) {
+  .container{padding:0 6px;}
+  .panel{padding:10px;}
+  .topbar{padding:6px 8px;}
+  .topbar-logo{font-size:9px;}
+  .u-name{max-width:55px;}
+  .tabs .tab{font-size:9px;padding:8px 1px;}
+  .mode-grid{grid-template-columns:repeat(4,1fr);gap:3px;}
+  .mode-btn{padding:6px 2px;}
+  .mode-icon{font-size:13px;}
+  .mode-name{font-size:8px;}
+  #chat-box{height:200px;}
+  .chat-row input{font-size:12px;}
+  .lang-row{gap:3px;}
+  .lang-btn{padding:6px 6px;font-size:10px;}
+  .lang-icon{font-size:12px;}
+  .lang-nm{font-size:8px;}
+  .git-qs{gap:3px;}
+  .gq{padding:4px 6px;font-size:9px;}
+  #git-term{height:200px;}
+  .git-stabs .git-stab{font-size:10px;padding:6px 2px;}
+  .ki-tab{font-size:10px;}
+  .model-row{flex-wrap:wrap;}
+  .model-row select{min-width:0;}
+  .rating-bar{flex-wrap:wrap;gap:5px;}
+  .pf-stats{grid-template-columns:1fr 1fr 1fr;}
+  .stat-val{font-size:16px;}
+  .comm-bubble{max-width:78%;}
+  .sett-preview{gap:8px;padding:10px;}
+  .color-swatches{gap:6px;}
+  .cs{width:30px;height:30px;}
+  .lang-btns .lbtn{padding:10px 4px;}
+  .lbtn .lf{font-size:20px;}
+  #comm-box{height:240px;}
+  .img-model-grid{grid-template-columns:1fr 1fr;}
+  .gen-actions{gap:4px;}
+  .modal{width:calc(100vw - 24px);max-width:360px;}
+}
+
+@media (min-width: 601px) and (max-width: 900px) {
+  .container{max-width:100%;padding:0 16px;}
+  #chat-box{height:260px;}
+  #comm-box{height:280px;}
+}
+
+@media (min-width: 901px) {
+  .container{max-width:580px;}
+}
+
+/* Touch improvements */
+@media (hover: none) and (pointer: coarse) {
+  .tab{padding:11px 2px;}
+  .send-btn,.run-btn,.git-run,.comm-send{min-width:48px;min-height:44px;}
+  .chat-row input, #git-in, #repl-in, #comm-in{min-height:44px;font-size:16px !important;}
+  .tool-btn,.ed-btn,.gq{min-height:36px;}
+  select{min-height:38px;}
+}
 </style>
 </head>
 <body>
