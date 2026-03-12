@@ -390,7 +390,7 @@ select{background:#141428;color:#e8e8f0;border:1px solid #222244;font-family:inh
       </div>
       <!-- AI CHAT -->
       <div class="ki-section active" id="ki-chat">
-        <div class="badge" data-i18n="badge_ai">Free AI via Puter.js · Web Search · Image Upload</div>
+        <div class="badge">🆓 Free AI via Pollinations.ai · No API key · Web Search · Images</div>
         <div class="mode-grid">
           <button class="mode-btn active" id="mode-normal"    onclick="setMode('normal')">   <span class="mode-icon">💬</span><span class="mode-name" data-i18n="mode_normal">Normal</span></button>
           <button class="mode-btn"        id="mode-search"    onclick="setMode('search')">   <span class="mode-icon">🔍</span><span class="mode-name" data-i18n="mode_search">Search</span></button>
@@ -446,30 +446,19 @@ select{background:#141428;color:#e8e8f0;border:1px solid #222244;font-family:inh
       </div>
       <!-- IMAGE GEN -->
       <div class="ki-section" id="ki-img">
-        <div class="eng-tabs">
-          <button class="eng-tab active" id="et-puter" onclick="setImgEng('puter')" data-i18n="eng_puter">Puter (10 models)</button>
-          <button class="eng-tab" id="et-poll" onclick="setImgEng('poll')" data-i18n="eng_poll">Pollinations (6)</button>
+        <div class="badge">🆓 Бесплатная генерация через Pollinations.ai — без ключей и регистрации</div>
+        <div class="img-model-grid">
+          <button class="imb active" id="ib-flux"  onclick="setImgM2('flux','ib-flux')">FLUX<span class="tag">fast & quality</span></button>
+          <button class="imb"        id="ib-fr"    onclick="setImgM2('flux-realism','ib-fr')">FLUX Realism<span class="tag">фото</span></button>
+          <button class="imb"        id="ib-fa"    onclick="setImgM2('flux-anime','ib-fa')">FLUX Anime<span class="tag">аниме</span></button>
+          <button class="imb"        id="ib-f3d"   onclick="setImgM2('flux-3d','ib-f3d')">FLUX 3D<span class="tag">3D рендер</span></button>
+          <button class="imb"        id="ib-fc"    onclick="setImgM2('flux-cablyai','ib-fc')">FLUX CablyAI<span class="tag">креатив</span></button>
+          <button class="imb"        id="ib-turbo" onclick="setImgM2('turbo','ib-turbo')">Turbo<span class="tag">быстро</span></button>
+          <button class="imb"        id="ib-gptimg" onclick="setImgM2('gptimage','ib-gptimg')">GPT Image<span class="tag">OpenAI</span></button>
+          <button class="imb"        id="ib-dream" onclick="setImgM2('dreamshaper','ib-dream')">DreamShaper<span class="tag">арт</span></button>
         </div>
-        <div class="eng-sec active" id="es-puter">
-          <div class="img-model-grid">
-            <button class="imb active" id="ib-gpt"     onclick="setImgM('gpt-image-1','ib-gpt')">GPT Image 1<span class="tag">OpenAI</span></button>
-            <button class="imb"        id="ib-dalle"   onclick="setImgM('dall-e-3','ib-dalle')">DALL-E 3<span class="tag">OpenAI</span></button>
-            <button class="imb"        id="ib-gemini"  onclick="setImgM('gemini-2.5-flash-image-preview','ib-gemini')">Gemini 2.5 Flash<span class="tag">Google</span></button>
-            <button class="imb"        id="ib-imagen"  onclick="setImgM('google/imagen-4.0-fast','ib-imagen')">Imagen 4 Fast<span class="tag">Google</span></button>
-            <button class="imb"        id="ib-fp"      onclick="setImgM('black-forest-labs/FLUX.1-pro','ib-fp')">FLUX.1 Pro<span class="tag">BFL</span></button>
-            <button class="imb"        id="ib-fd"      onclick="setImgM('black-forest-labs/FLUX.1-dev','ib-fd')">FLUX.1 Dev<span class="tag">creative</span></button>
-            <button class="imb"        id="ib-fs"      onclick="setImgM('black-forest-labs/FLUX.1-schnell','ib-fs')">FLUX.1 Schnell<span class="tag">fast</span></button>
-            <button class="imb"        id="ib-ideo"    onclick="setImgM('ideogram/ideogram-3.0','ib-ideo')">Ideogram 3.0<span class="tag">text</span></button>
-            <button class="imb"        id="ib-sd3"     onclick="setImgM('stabilityai/stable-diffusion-3-medium','ib-sd3')">SD 3<span class="tag">Stability</span></button>
-            <button class="imb"        id="ib-hid"     onclick="setImgM('HiDream-ai/HiDream-I1-Fast','ib-hid')">HiDream Fast<span class="tag">Anime</span></button>
-          </div>
-          <div class="size-row"><select id="img-sz"><option value="">Auto</option><option value="square_hd">Square HD</option><option value="square">Square</option><option value="portrait_4_3">Portrait 4:3</option><option value="landscape_4_3">Landscape 4:3</option><option value="portrait_16_9">Portrait 16:9</option><option value="landscape_16_9">Landscape 16:9</option></select></div>
-        </div>
-        <div class="eng-sec" id="es-poll">
-          <div class="size-row">
-            <select id="poll-m"><option value="flux">FLUX</option><option value="flux-realism">FLUX Realism</option><option value="flux-anime">FLUX Anime</option><option value="flux-3d">FLUX 3D</option><option value="flux-cablyai">FLUX CablyAI</option><option value="turbo">Turbo</option></select>
-            <select id="poll-s"><option value="768x768">768x768</option><option value="1024x1024">1024x1024</option><option value="1024x768">Landscape</option><option value="768x1024">Portrait</option></select>
-          </div>
+        <div class="size-row">
+          <select id="poll-s"><option value="768x768">Square 768</option><option value="1024x1024">Square 1024</option><option value="1024x768">Landscape 4:3</option><option value="768x1024">Portrait 3:4</option><option value="1280x720">Wide 16:9</option><option value="720x1280">Tall 9:16</option></select>
         </div>
         <div class="chips">
           <span class="chip" onclick="addChip('photorealistic, 8k')">Photorealistic</span>
@@ -1341,67 +1330,125 @@ function addMsg(role,text,imgUrls){
 }
 function clearChat(){ chatHistory=[]; document.getElementById('chat-box').innerHTML=''; addMsg('sys-note',t('chat_hello')); }
 
+// Map our model IDs to Pollinations model names
+const POLL_MODELS = {
+  'gpt-4o-mini':     'openai',
+  'gpt-4o':          'openai',
+  'gpt-4.1':         'openai',
+  'gpt-4.1-mini':    'openai-fast',
+  'gpt-4.1-nano':    'openai-fast',
+  'o1':              'openai-reasoning',
+  'o1-mini':         'openai-reasoning',
+  'o3-mini':         'openai-reasoning',
+  'claude-opus-4':         'claude-hybridspace',
+  'claude-sonnet-4':       'claude-hybridspace',
+  'claude-haiku-4-5':      'claude-hybridspace',
+  'claude-3-5-sonnet':     'claude-hybridspace',
+  'claude-3-opus':         'claude-hybridspace',
+  'google/gemini-2.5-pro':       'gemini',
+  'google/gemini-2.5-flash':     'gemini',
+  'google/gemini-2.0-flash':     'gemini',
+  'google/gemini-2.0-flash-lite':'gemini',
+  'google/gemini-1.5-pro':       'gemini',
+  'google/gemini-1.5-flash':     'gemini',
+  'meta-llama/llama-4-maverick':        'llama',
+  'meta-llama/llama-4-scout':           'llama',
+  'meta-llama/llama-3.3-70b-instruct':  'llama',
+  'meta-llama/llama-3.1-70b-instruct':  'llama',
+  'meta-llama/llama-3.1-8b-instruct':   'llama',
+  'mistralai/mistral-small-3.1-24b-instruct': 'mistral',
+  'mistralai/mistral-large':             'mistral',
+  'mistralai/mixtral-8x7b-instruct':     'mistral',
+  'deepseek/deepseek-r1':      'deepseek-reasoning',
+  'deepseek/deepseek-r1-0528': 'deepseek-reasoning',
+  'deepseek/deepseek-v3':      'deepseek',
+  'qwen/qwen3.5-27b':            'qwen',
+  'qwen/qwen2.5-72b-instruct':   'qwen',
+  'qwen/qwen2.5-coder-32b':      'qwen-coder',
+  'qwen/qwq-32b':                'qwen',
+  'microsoft/phi-4':             'phi',
+  'microsoft/phi-4-mini':        'phi',
+  'cohere/command-r-plus':       'command-r',
+  'cohere/command-r':            'command-r',
+  'nousresearch/hermes-3-llama-3.1-405b': 'llama',
+  'perplexity/llama-3.1-sonar-large-128k-online': 'searchgpt',
+};
+
 async function sendMsg(){
   const inp=document.getElementById('chat-in'), btn=document.getElementById('send-btn');
   const txt=inp.value.trim(); if(!txt&&uploadedImgs.length===0) return;
   inp.value=''; btn.disabled=true;
-  const snap=[...uploadedImgs], urls=snap.map(i=>i.url); let uc;
+  const snap=[...uploadedImgs], urls=snap.map(i=>i.url);
+  // Build message content
+  let userContent;
   if(snap.length>0){
-    uc=[]; snap.forEach(img=>uc.push({type:'image_url',image_url:{url:`data:${img.type};base64,${img.b64}`}}));
-    uc.push({type:'text',text:txt||(snap.length>1?'Compare these images.':'What do you see?')});
+    // Images: send as multipart
+    userContent=[]; snap.forEach(img=>userContent.push({type:'image_url',image_url:{url:`data:${img.type};base64,${img.b64}`}}));
+    userContent.push({type:'text',text:txt||(snap.length>1?'Compare these images.':'What do you see?')});
     addMsg('user',txt||snap.length+' image(s)',urls); clearImgs();
-  } else { uc=txt; addMsg('user',txt); }
-  chatHistory.push({role:'user',content:uc});
+  } else { userContent=txt; addMsg('user',txt); }
+  chatHistory.push({role:'user',content:userContent});
   const d=loadUD(currentUser); d.totalMessages=(d.totalMessages||0)+1; saveUD(currentUser,d);
-  const sys=getSysPr(); let msgs=chatHistory.map(m=>({role:m.role,content:m.content}));
+  const sys=getSysPr();
+  let msgs=chatHistory.map(m=>({role:m.role,content:m.content}));
   if(sys) msgs=[{role:'system',content:sys},...msgs];
   if(currentMode==='search') addMsg('search-note',t('searching'));
   const tEl=addMsg('ai','...'); tEl.className='msg ai typing';
   try{
-    const opts={model:selectedModel}; if(currentMode==='search') opts.tools=[{type:'web_search_20250305',name:'web_search'}];
-    const res=await puter.ai.chat(msgs,opts);
-    let ans='';
-    if(typeof res==='string') ans=res;
-    else if(res?.message?.content){ const c=res.message.content; ans=Array.isArray(c)?c.filter(x=>x.type==='text'||!x.type).map(x=>x.text||x).join(''):String(c); }
-    else if(res?.content){ const c=res.content; ans=Array.isArray(c)?c.filter(x=>x.type==='text'||!x.type).map(x=>x.text||x).join(''):String(c); }
-    else ans=JSON.stringify(res);
+    // Use Pollinations free text API
+    const pollModel = POLL_MODELS[selectedModel] || 'openai';
+    const payload = { messages: msgs, model: pollModel, stream: false, seed: -1, jsonMode: false };
+    const resp = await fetch('https://text.pollinations.ai/', {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify(payload)
+    });
+    if(!resp.ok) throw new Error('HTTP '+resp.status+': '+resp.statusText);
+    const ans = await resp.text();
+    if(!ans||ans.trim()==='') throw new Error('Empty response');
     chatHistory.push({role:'assistant',content:ans});
-    tEl.className='msg ai'; tEl.innerHTML=''; const sp=document.createElement('span'); sp.textContent=ans; tEl.appendChild(sp);
-  } catch(e){ tEl.className='msg ai'; tEl.innerHTML=''; const sp=document.createElement('span'); sp.textContent='Error: '+e.message; tEl.appendChild(sp); chatHistory.pop(); }
+    tEl.className='msg ai'; tEl.innerHTML='';
+    const sp=document.createElement('span'); sp.textContent=ans; tEl.appendChild(sp);
+  } catch(e){
+    tEl.className='msg ai'; tEl.innerHTML='';
+    const sp=document.createElement('span'); sp.textContent='❌ '+e.message; tEl.appendChild(sp);
+    chatHistory.pop();
+  }
   btn.disabled=false; document.getElementById('chat-box').scrollTop=99999; inp.focus();
 }
 
 // ═══════════════════════════════════════════
 //  IMAGE GENERATOR
 // ═══════════════════════════════════════════
-let imgModel='gpt-image-1', lastImgUrl='', currentImgEng='puter';
-function setImgEng(e){ document.querySelectorAll('.eng-tab').forEach(b=>b.classList.remove('active')); document.querySelectorAll('.eng-sec').forEach(s=>s.classList.remove('active')); document.getElementById('et-'+e).classList.add('active'); document.getElementById('es-'+e).classList.add('active'); currentImgEng=e; }
-function setImgM(m,id){ imgModel=m; document.querySelectorAll('.imb').forEach(b=>b.classList.remove('active')); document.getElementById(id).classList.add('active'); }
+let lastImgUrl='';
 function addChip(s){ const i=document.getElementById('img-prompt'); i.value=i.value?(i.value+', '+s):s; i.focus(); }
+let imgModel2='flux';
+function setImgM2(m,id){ imgModel2=m; document.querySelectorAll('.imb').forEach(b=>b.classList.remove('active')); document.getElementById(id).classList.add('active'); }
 async function genImg(){
   const p=document.getElementById('img-prompt').value.trim(); if(!p) return;
   const btn=document.getElementById('img-btn'); btn.disabled=true;
   document.getElementById('dl-btn').disabled=true; document.getElementById('regen-btn').disabled=true;
   document.getElementById('img-st').textContent='Generating...';
-  document.getElementById('img-res').innerHTML='<div class="ph-img">...</div>';
-  if(currentImgEng==='puter'){
-    try{
-      const opts={model:imgModel}; const sz=document.getElementById('img-sz').value; if(sz) opts.image_size=sz;
-      const resp=await puter.ai.txt2img(p,opts);
-      if(resp instanceof HTMLImageElement){ lastImgUrl=resp.src; resp.style.width='100%'; resp.style.borderRadius='4px'; document.getElementById('img-res').innerHTML=''; document.getElementById('img-res').appendChild(resp); }
-      else if(resp&&resp.src){ lastImgUrl=resp.src; document.getElementById('img-res').innerHTML=`<img src="${resp.src}" style="width:100%;border-radius:4px;">`; }
-      else throw new Error('No image returned');
-      document.getElementById('img-st').textContent='Done — '+imgModel;
-      document.getElementById('dl-btn').disabled=false; document.getElementById('regen-btn').disabled=false;
-    } catch(e){ document.getElementById('img-st').textContent='Error: '+e.message; document.getElementById('img-res').innerHTML='<div class="ph-img">'+e.message+'</div>'; }
-  } else {
-    const model=document.getElementById('poll-m').value, sz=document.getElementById('poll-s').value.split('x'), seed=Math.floor(Math.random()*999999);
-    lastImgUrl=`https://image.pollinations.ai/prompt/${encodeURIComponent(p)}?model=${model}&width=${sz[0]}&height=${sz[1]}&seed=${seed}&nologo=true`;
-    const img=new Image(); img.onload=()=>{ img.style.cssText='width:100%;border-radius:4px;'; document.getElementById('img-res').innerHTML=''; document.getElementById('img-res').appendChild(img); document.getElementById('img-st').textContent='Done — '+model; document.getElementById('dl-btn').disabled=false; document.getElementById('regen-btn').disabled=false; btn.disabled=false; };
-    img.onerror=()=>{ document.getElementById('img-st').textContent='Error loading image'; document.getElementById('img-res').innerHTML='<div class="ph-img">Error</div>'; btn.disabled=false; };
-    img.src=lastImgUrl; return;
-  }
-  btn.disabled=false;
+  document.getElementById('img-res').innerHTML='<div class="ph-img">⏳ Please wait...</div>';
+  const sz=document.getElementById('poll-s').value.split('x');
+  const seed=Math.floor(Math.random()*999999);
+  lastImgUrl=`https://image.pollinations.ai/prompt/${encodeURIComponent(p)}?model=${imgModel2}&width=${sz[0]}&height=${sz[1]}&seed=${seed}&nologo=true&enhance=true`;
+  const img=new Image();
+  img.onload=()=>{
+    img.style.cssText='width:100%;border-radius:4px;display:block;';
+    document.getElementById('img-res').innerHTML='';
+    document.getElementById('img-res').appendChild(img);
+    document.getElementById('img-st').textContent='✓ Done — '+imgModel2;
+    document.getElementById('dl-btn').disabled=false;
+    document.getElementById('regen-btn').disabled=false;
+    btn.disabled=false;
+  };
+  img.onerror=()=>{
+    document.getElementById('img-st').textContent='❌ Error generating image';
+    document.getElementById('img-res').innerHTML='<div class="ph-img">Error. Try a different prompt or model.</div>';
+    btn.disabled=false;
+  };
+  img.src=lastImgUrl;
 }
 function dlImg(){ if(!lastImgUrl) return; const a=document.createElement('a'); a.href=lastImgUrl; a.download='image.png'; a.target='_blank'; a.click(); }
 
