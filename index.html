@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>AI Studio</title>
+<title>ALLAI</title>
 <script src="https://js.puter.com/v2/"></script>
 <script src="https://cdn.pubnub.com/sdk/javascript/pubnub.7.4.5.min.js"></script>
 <style>
@@ -464,6 +464,23 @@ body.light .tabs{background:var(--bg2);}
   .tool-btn,.ed-btn,.gq{min-height:36px;}
   select{min-height:38px;}
 }
+
+/* ═══ ADMIN ═══ */
+.admin-crown{font-size:10px;margin-left:3px;}
+.comm-msg .admin-badge{font-size:8px;background:#e9456022;color:#e94560;border:1px solid #e9456044;border-radius:3px;padding:1px 4px;margin-left:4px;letter-spacing:1px;vertical-align:middle;}
+.msg-del-btn{background:none;border:none;color:var(--text4);cursor:pointer;font-size:11px;margin-left:6px;padding:0 3px;opacity:0;transition:opacity .2s;}
+.comm-msg:hover .msg-del-btn{opacity:1;}
+.msg-del-btn:hover{color:#ff4466;}
+.ban-btn{padding:2px 7px;background:#2a0a0a;color:#ff4466;border:1px solid #ff446644;cursor:pointer;font-family:inherit;font-size:9px;border-radius:3px;margin-left:4px;}
+.ban-btn:hover{background:#ff4466;color:#fff;}
+.banned-notice{text-align:center;padding:30px;color:#ff4466;font-size:13px;}
+.admin-panel{background:var(--bg3);border:1px solid #e9456033;border-radius:6px;padding:12px;margin-bottom:14px;}
+.admin-panel-title{font-size:10px;color:#e94560;letter-spacing:2px;margin-bottom:10px;}
+.admin-user-row{display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid var(--border);font-size:11px;}
+.admin-user-row:last-child{border-bottom:none;}
+.aur-name{flex:1;color:var(--text);}
+.aur-email{color:var(--text3);font-size:10px;min-width:120px;}
+.aur-joined{color:var(--text4);font-size:9px;min-width:70px;}
 </style>
 </head>
 <body>
@@ -472,8 +489,8 @@ body.light .tabs{background:var(--bg2);}
 <div id="auth-screen">
   <div class="auth-box">
     <div class="auth-logo">
-      <span class="logo-big">⚡ AI STUDIO</span>
-      <span class="logo-sub" data-i18n="auth_sub">AI · IMAGES · COMPILER · GIT · CHAT</span>
+      <span class="logo-big">⚡ ALLAI</span>
+      <span class="logo-sub" data-i18n="auth_sub">AI · IMAGES · CODE · GIT · CHAT</span>
     </div>
     <div class="auth-lang-row">
       <button class="alb active" onclick="setLang('en')">🇬🇧 EN</button>
@@ -493,6 +510,7 @@ body.light .tabs{background:var(--bg2);}
     </div>
     <div class="auth-panel" id="ap-reg">
       <div class="auth-field"><label data-i18n="username">Username</label><input id="r-user" type="text" autocomplete="username"></div>
+      <div class="auth-field"><label data-i18n="email_label">Email</label><input id="r-email" type="email" autocomplete="email" placeholder="you@example.com"></div>
       <div class="auth-field"><label data-i18n="password">Password</label><input id="r-pass" type="password" autocomplete="new-password"></div>
       <div class="auth-field"><label data-i18n="confirm_pass">Confirm Password</label><input id="r-pass2" type="password" autocomplete="new-password" onkeydown="if(event.key=='Enter')doRegister()"></div>
       <button class="auth-submit" onclick="doRegister()" data-i18n="btn_register">CREATE ACCOUNT</button>
@@ -506,7 +524,7 @@ body.light .tabs{background:var(--bg2);}
 <div id="app-screen">
   <div class="container">
     <div class="topbar">
-      <span class="topbar-logo">⚡ AI STUDIO</span>
+      <span class="topbar-logo">⚡ ALLAI</span>
       <div class="user-pill" onclick="openModal('profile-modal')">
         <div class="u-av" id="top-av">?</div>
         <span class="u-name" id="top-name">User</span>
@@ -514,7 +532,7 @@ body.light .tabs{background:var(--bg2);}
       <button class="theme-btn" id="theme-btn" onclick="toggleTheme()" title="Toggle theme">🌙</button>
       <button class="logout-btn" onclick="doLogout()" data-i18n="logout">Logout</button>
     </div>
-    <div class="header-strip" id="header-strip" data-i18n="header_strip">AI · IMAGES · COMPILER · GIT · COMMUNITY CHAT</div>
+    <div class="header-strip" id="header-strip" data-i18n="header_strip">AI · IMAGES · CODE · GIT · COMMUNITY</div>
     <div class="tabs">
       <button class="tab active" onclick="showTab('ai',this)"   data-i18n="tab_ai">AI</button>
       <button class="tab" onclick="showTab('comp',this)"        data-i18n="tab_compiler">Code</button>
@@ -764,6 +782,10 @@ body.light .tabs{background:var(--bg2);}
           <input class="sett-in" id="s-disp" type="text" data-i18n-ph="disp_ph" placeholder="Your display name" oninput="updatePreview()">
         </div>
         <div class="sett-field">
+          <label data-i18n="email_label">Email</label>
+          <input class="sett-in" id="s-email" type="email" placeholder="you@example.com">
+        </div>
+        <div class="sett-field">
           <label data-i18n="bio">Bio</label>
           <textarea class="sett-ta" id="s-bio" data-i18n-ph="bio_ph" placeholder="Something about you..." oninput="updatePreview()"></textarea>
         </div>
@@ -821,6 +843,18 @@ body.light .tabs{background:var(--bg2);}
       </div>
       <button class="sett-save" onclick="saveSettings()" data-i18n="save_settings">💾 Save Changes</button>
       <div class="sett-saved" id="sett-saved"></div>
+
+      <!-- ADMIN PANEL (only visible to admins) -->
+      <div id="admin-section" style="display:none;margin-top:20px;">
+        <div class="admin-panel">
+          <div class="admin-panel-title">👑 ADMIN PANEL</div>
+          <div style="display:flex;gap:8px;margin-bottom:10px;">
+            <button class="ed-btn" style="flex:1;" onclick="adminLoadUsers()">👥 Load Users</button>
+            <button class="ed-btn" style="flex:1;" onclick="adminClearBanned()">🔓 Unban All</button>
+          </div>
+          <div id="admin-user-list" style="max-height:200px;overflow-y:auto;"></div>
+        </div>
+      </div>
     </div>
   </div>
 </div>
@@ -835,6 +869,7 @@ body.light .tabs{background:var(--bg2);}
       <div class="pf-disp" id="pf-disp"></div>
       <div class="pf-bio"  id="pf-bio"></div>
       <div class="pf-joined" id="pf-joined"></div>
+      <div class="pf-joined" id="pf-email" style="color:var(--text3);margin-top:-8px;"></div>
       <div class="pf-stats">
         <div class="stat-box"><div class="stat-val" id="st-msg">0</div><div class="stat-lbl" data-i18n="stat_msg">MESSAGES</div></div>
         <div class="stat-box"><div class="stat-val" id="st-rat">0</div><div class="stat-lbl" data-i18n="stat_rat">RATINGS</div></div>
@@ -860,11 +895,11 @@ body.light .tabs{background:var(--bg2);}
 // ═══════════════════════════════════════════
 const TR = {
 en:{
-  auth_sub:'AI · IMAGES · COMPILER · GIT · CHAT',
+  auth_sub:'AI · IMAGES · CODE · GIT · CHAT',
   login:'Sign In', register:'Register', username:'Username', password:'Password', confirm_pass:'Confirm Password',
   btn_login:'SIGN IN', btn_register:'CREATE ACCOUNT',
   sync_note:'☁️ Accounts saved to cloud via Puter.js — accessible from any device',
-  logout:'Logout', header_strip:'AI · IMAGES · COMPILER · GIT · COMMUNITY CHAT',
+  logout:'Logout', header_strip:'AI · IMAGES · CODE · GIT · COMMUNITY',
   tab_ai:'AI', tab_compiler:'Code', tab_git:'Git', tab_community:'Community', tab_settings:'Settings',
   ai_chat:'AI Chat', image_gen:'Image Gen',
   badge_ai:'Free AI via Puter.js · Web Search · Image Upload',
@@ -919,7 +954,9 @@ en:{
   save_settings:'💾 Save Changes', saved:'Saved!',
   my_profile:'MY PROFILE', stat_msg:'MESSAGES', stat_rat:'RATINGS', stat_com:'GIT COMMITS',
   update_pass:'Update Password',
-  err_fill:'Please fill in all fields.', err_short_user:'Username: min 3 chars.',
+  err_fill:'Please fill in all fields.',
+  err_email:'Please enter a valid email address.',
+  email_label:'Email', err_short_user:'Username: min 3 chars.',
   err_short_pass:'Password: min 4 chars.', err_pass_match:'Passwords do not match.',
   err_taken:'Username already taken.', err_not_found:'Account not found.',
   err_wrong_pass:'Wrong password.', ok_created:'Account created! Signing in...',
@@ -932,7 +969,7 @@ ru:{
   login:'Войти', register:'Регистрация', username:'Имя пользователя', password:'Пароль', confirm_pass:'Подтвердите пароль',
   btn_login:'ВОЙТИ', btn_register:'СОЗДАТЬ АККАУНТ',
   sync_note:'☁️ Аккаунты сохраняются в облако через Puter.js — доступны с любого устройства',
-  logout:'Выйти', header_strip:'ИИ · КАРТИНКИ · КОМПИЛЯТОР · GIT · ОБЩИЙ ЧАТ',
+  logout:'Выйти', header_strip:'AI · КАРТИНКИ · КОД · GIT · ЧАТ',
   tab_ai:'ИИ', tab_compiler:'Код', tab_git:'Git', tab_community:'Сообщество', tab_settings:'Настройки',
   ai_chat:'ИИ Чат', image_gen:'Генератор',
   badge_ai:'Бесплатный ИИ через Puter.js · Веб-поиск · Загрузка фото',
@@ -988,7 +1025,9 @@ ru:{
   save_settings:'💾 Сохранить', saved:'Сохранено!',
   my_profile:'МОЙ ПРОФИЛЬ', stat_msg:'СООБЩЕНИЙ', stat_rat:'ОЦЕНОК', stat_com:'GIT КОММИТОВ',
   update_pass:'Обновить пароль',
-  err_fill:'Заполните все поля.', err_short_user:'Имя: минимум 3 символа.',
+  err_fill:'Заполните все поля.',
+  err_email:'Введите корректный email адрес.',
+  email_label:'Email', err_short_user:'Имя: минимум 3 символа.',
   err_short_pass:'Пароль: минимум 4 символа.', err_pass_match:'Пароли не совпадают.',
   err_taken:'Имя пользователя занято.', err_not_found:'Аккаунт не найден.',
   err_wrong_pass:'Неверный пароль.', ok_created:'Аккаунт создан! Входим...',
@@ -997,11 +1036,11 @@ ru:{
   git_ready:'Git симулятор готов. Запустите "git init".',
 },
 de:{
-  auth_sub:'KI · BILDER · COMPILER · GIT · CHAT',
+  auth_sub:'AI · BILDER · CODE · GIT · CHAT',
   login:'Anmelden', register:'Registrieren', username:'Benutzername', password:'Passwort', confirm_pass:'Passwort bestätigen',
   btn_login:'ANMELDEN', btn_register:'KONTO ERSTELLEN',
   sync_note:'☁️ Konten werden in der Cloud via Puter.js gespeichert — von jedem Gerät zugänglich',
-  logout:'Abmelden', header_strip:'KI · BILDER · COMPILER · GIT · COMMUNITY CHAT',
+  logout:'Abmelden', header_strip:'AI · BILDER · CODE · GIT · COMMUNITY',
   tab_ai:'KI', tab_compiler:'Code', tab_git:'Git', tab_community:'Community', tab_settings:'Einstellungen',
   ai_chat:'KI Chat', image_gen:'Bildgenerator',
   badge_ai:'Kostenlose KI via Puter.js · Websuche · Bild-Upload',
@@ -1057,7 +1096,9 @@ de:{
   save_settings:'💾 Speichern', saved:'Gespeichert!',
   my_profile:'MEIN PROFIL', stat_msg:'NACHRICHTEN', stat_rat:'BEWERTUNGEN', stat_com:'GIT COMMITS',
   update_pass:'Passwort aktualisieren',
-  err_fill:'Bitte alle Felder ausfüllen.', err_short_user:'Benutzername: min. 3 Zeichen.',
+  err_fill:'Bitte alle Felder ausfüllen.',
+  err_email:'Bitte eine gültige E-Mail-Adresse eingeben.',
+  email_label:'E-Mail', err_short_user:'Benutzername: min. 3 Zeichen.',
   err_short_pass:'Passwort: min. 4 Zeichen.', err_pass_match:'Passwörter stimmen nicht überein.',
   err_taken:'Benutzername bereits vergeben.', err_not_found:'Konto nicht gefunden.',
   err_wrong_pass:'Falsches Passwort.', ok_created:'Konto erstellt! Anmelden...',
@@ -1109,6 +1150,9 @@ async function kvLoadUD(username){
 }
 
 const AV_COLORS = ['av-red','av-purple','av-blue','av-green','av-orange','av-pink','av-cyan','av-lime'];
+// Admin usernames (lowercase) — add yours here
+const ADMIN_USERS = ['nigga','admin','owner'];
+function isAdmin(u){ return ADMIN_USERS.includes((u||'').toLowerCase()); }
 function autoColor(u){ let h=0; for(let i=0;i<u.length;i++) h+=u.charCodeAt(i); return AV_COLORS[h%AV_COLORS.length]; }
 function initials(u){ return u.slice(0,2).toUpperCase(); }
 
@@ -1162,7 +1206,9 @@ async function doRegister(){
   const cloudAcc = await kvLoadAccount(user);
   if(cloudAcc){ err.textContent=t('err_taken'); accs[user]=cloudAcc; lsSaveAccounts(accs); return; }
 
-  const accData = { pw:hashPw(pass), joined:new Date().toLocaleDateString(), color:autoColor(user) };
+  const email = document.getElementById('r-email')?.value?.trim()||'';
+  if(!email||!email.includes('@')){ err.textContent=t('err_email'); return; }
+  const accData = { pw:hashPw(pass), joined:new Date().toLocaleDateString(), color:autoColor(user), email };
   accs[user] = accData;
   lsSaveAccounts(accs);
   kvSaveAccount(user, accData); // async cloud save
@@ -1190,6 +1236,7 @@ function loginUser(user){
   gitReset2();
   loadSettingsPanel();
   initPubNub();
+  loadBannedFromCloud();
   applyI18n();
   setInterval(()=>syncUserData(), 30000);
 }
@@ -1217,7 +1264,7 @@ function updateTopbar(){
   const col = d.avatarColor || autoColor(currentUser);
   const av = document.getElementById('top-av');
   av.textContent = initials(currentUser); av.className='u-av '+col;
-  document.getElementById('top-name').textContent = d.displayName || currentUser;
+  document.getElementById('top-name').textContent = (d.displayName || currentUser) + (isAdmin(currentUser) ? ' 👑' : '');
 }
 
 // Profile modal
@@ -1236,6 +1283,7 @@ function fillProfileModal(){
   document.getElementById('pf-disp').textContent=d.displayName&&d.displayName!==currentUser?d.displayName:'';
   document.getElementById('pf-bio').textContent=d.bio||'';
   document.getElementById('pf-joined').textContent='Joined: '+(ac.joined||'—');
+  const emailEl=document.getElementById('pf-email'); if(emailEl) emailEl.textContent=(d.email||ac.email)?'✉️ '+(d.email||ac.email||''):'';
   document.getElementById('st-msg').textContent=d.totalMessages||0;
   document.getElementById('st-rat').textContent=Object.values(ratings).reduce((s,r)=>s+r.good+r.bad,0);
   document.getElementById('st-com').textContent=gitState.commits.length;
@@ -1267,11 +1315,15 @@ function loadSettingsPanel(){
   const d = loadUD(currentUser);
   document.getElementById('s-disp').value = d.displayName||'';
   document.getElementById('s-bio').value  = d.bio||'';
+  if(document.getElementById('s-email')) document.getElementById('s-email').value = d.email || lsAccounts()[currentUser]?.email || '';
   pickedColor = d.avatarColor || autoColor(currentUser);
   refreshSwatches();
   updatePreview();
   ['en','ru','de'].forEach(l=>{ const el=document.getElementById('lbtn-'+l); if(el) el.classList.toggle('active',l===currentLang); });
   loadApiKeysToPanel();
+  // Show admin section if admin
+  const adminSec = document.getElementById('admin-section');
+  if(adminSec) adminSec.style.display = isAdmin(currentUser) ? 'block' : 'none';
 }
 
 function pickColor(c){ pickedColor=c; refreshSwatches(); updatePreview(); }
@@ -1294,6 +1346,7 @@ async function saveSettings(){
   const d = loadUD(currentUser);
   d.displayName = document.getElementById('s-disp').value.trim() || currentUser;
   d.bio         = document.getElementById('s-bio').value.trim();
+  d.email       = document.getElementById('s-email')?.value?.trim()||d.email||'';
   d.avatarColor = pickedColor || autoColor(currentUser);
   d.lang        = currentLang;
 
@@ -1454,7 +1507,7 @@ function showTab(n,el){
   el.classList.add('active');
   if(n==='settings') loadSettingsPanel();
   if(n==='comp'&&currentLangCode==='python') initPyodide();
-  if(n==='comm') scrollCommBox();
+  if(n==='comm'){ scrollCommBox(); if(isUserBanned(currentUser)){ document.getElementById('comm-box').innerHTML='<div class="banned-notice">🚫 Вы заблокированы в чате администратором.</div>'; document.getElementById('comm-in').disabled=true; } }
 }
 function setKiTab(t2){
   document.querySelectorAll('.ki-tab').forEach(b=>b.classList.remove('active'));
@@ -1756,7 +1809,7 @@ const EXAMPLES={
   javascript:`console.log("Hello World!");\nconst nums = [1,2,3,4,5];\nconsole.log("Sum:", nums.reduce((a,b)=>a+b,0));\nconsole.log("Squares:", nums.map(n=>n*n));\nnums.forEach(n => console.log("  " + "★".repeat(n)));`,
   html:`<!DOCTYPE html>\n<html><head><style>\nbody{background:#0a0a14;color:#e8e8f0;font-family:sans-serif;display:flex;align-items:center;justify-content:center;height:100vh;margin:0;}\n.card{background:#141428;padding:30px;border-radius:12px;text-align:center;box-shadow:0 0 40px #e9456033;}\nh1{color:#e94560;margin-bottom:10px;}\nbutton{background:#e94560;color:#fff;border:none;padding:10px 24px;border-radius:6px;cursor:pointer;font-size:14px;}\nbutton:hover{background:#c73652;}\n</style></head><body>\n<div class="card">\n  <h1>Hello World!</h1>\n  <p>Click the button</p>\n  <button onclick="this.textContent='Clicked! ✓'">Click me</button>\n</div></body></html>`,
   css:`body{background:linear-gradient(135deg,#080810,#141428);display:flex;align-items:center;justify-content:center;height:100vh;margin:0;}\n.card{background:#0e0e20;padding:30px 40px;border-radius:12px;text-align:center;box-shadow:0 0 40px #e9456033;border:1px solid #2a2a4a;}\nh1{color:#e94560;font-family:'Courier New',monospace;}\n.dot{width:10px;height:10px;background:#e94560;border-radius:50%;display:inline-block;margin:8px 3px 0;animation:p 1s infinite;}\n@keyframes p{0%,100%{opacity:1;transform:scale(1);}50%{opacity:.4;transform:scale(1.4);}}`,
-  json:`{\n  "app": "AI Studio",\n  "version": "11.0",\n  "features": [\n    "AI Chat",\n    "Image Generator",\n    "Compiler + REPL",\n    "Git Simulator",\n    "Community Chat",\n    "Settings + i18n"\n  ],\n  "languages": ["en", "ru", "de"],\n  "accounts": "cloud-synced"\n}`
+  json:`{\n  "app": "ALLAI",\n  "version": "11.0",\n  "features": [\n    "AI Chat",\n    "Image Generator",\n    "Compiler + REPL",\n    "Git Simulator",\n    "Community Chat",\n    "Settings + i18n"\n  ],\n  "languages": ["en", "ru", "de"],\n  "accounts": "cloud-synced"\n}`
 };
 const LANG_META={
   python:    {name:'Python',    color:'#3776ab',pr:'>>> ',prCls:'',    btnCls:''},
@@ -1965,6 +2018,7 @@ function announceJoin(){
 }
 
 function sendComm(){
+  if(isUserBanned(currentUser)){ setCommStatus('🚫 Вы заблокированы',false); return; }
   if(!pubnubInst||!currentUser){ setCommStatus(t('comm_failed'),false); return; }
   const inp=document.getElementById('comm-in'); const txt=inp.value.trim(); if(!txt) return;
   const d=loadUD(currentUser); const col=d.avatarColor||autoColor(currentUser); const dispName=d.displayName||currentUser;
@@ -1975,22 +2029,106 @@ function sendComm(){
 function displayCommMsg(msg){
   const box=document.getElementById('comm-box');
   if(msg.type==='join'){
+    if(isUserBanned(msg.user||'')) return;
     const d=document.createElement('div'); d.className='comm-sys-msg'; d.textContent=(msg.dispName||msg.user)+t('comm_joined'); box.appendChild(d); scrollCommBox(); return;
   }
+  if(msg.type==='admin_delete'){
+    const el=document.getElementById('comm-msg-'+msg.msgId); if(el) el.remove(); return;
+  }
   if(msg.type!=='msg') return;
+  // Block banned users
+  if(isUserBanned(msg.user||'')) return;
+  const msgId = msg.ts ? String(msg.ts) : String(Date.now()+Math.random());
   const isOwn = msg.user===currentUser;
-  const d=document.createElement('div'); d.className='comm-msg'+(isOwn?' own':'');
-  const av=document.createElement('div'); av.className='comm-av '+(msg.col||'av-blue'); av.textContent=initials(msg.user);
+  const senderIsAdmin = isAdmin(msg.user||'');
+  const d=document.createElement('div'); d.className='comm-msg'+(isOwn?' own':''); d.id='comm-msg-'+msgId;
+  const av=document.createElement('div'); av.className='comm-av '+(msg.col||'av-blue'); av.textContent=initials(msg.user||'?');
   const bubble=document.createElement('div'); bubble.className='comm-bubble';
-  const name=document.createElement('div'); name.className='comm-name'; name.textContent=msg.dispName||msg.user;
+  const name=document.createElement('div'); name.className='comm-name';
+  name.innerHTML=(msg.dispName||msg.user)+(senderIsAdmin?'<span class="admin-badge">ADMIN</span>':'')+
+    (isAdmin(currentUser)&&!isOwn?`<button class="msg-del-btn" onclick="adminDeleteCommMsg('${msgId}')" title="Delete">🗑</button><button class="ban-btn" onclick="adminBanUser('${msg.user}')" title="Ban user">🚫</button>`:'');
   const text=document.createElement('div'); text.className='comm-text'; text.textContent=msg.text;
-  const time=document.createElement('div'); time.className='comm-time'; time.textContent=msg.ts?new Date(msg.ts).toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'}):'';
+  const time=document.createElement('div'); time.className='comm-time'; time.textContent=msg.ts?new Date(msg.ts).toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'}):'';
   bubble.appendChild(name); bubble.appendChild(text); bubble.appendChild(time);
   d.appendChild(av); d.appendChild(bubble);
   box.appendChild(d); scrollCommBox();
 }
 
 function scrollCommBox(){ const b=document.getElementById('comm-box'); if(b) b.scrollTop=b.scrollHeight; }
+
+// ═══════════════════════════════════════════
+//  ADMIN FUNCTIONS
+// ═══════════════════════════════════════════
+function getBannedUsers(){ try{ return JSON.parse(localStorage.getItem('aistudio_banned')||'[]'); }catch(e){ return []; } }
+function saveBannedUsers(list){ localStorage.setItem('aistudio_banned', JSON.stringify(list)); }
+function isUserBanned(u){ return getBannedUsers().includes(u.toLowerCase()); }
+
+function adminBanUser(username){
+  if(isAdmin(username)){ alert('Cannot ban an admin!'); return; }
+  const banned = getBannedUsers();
+  if(!banned.includes(username.toLowerCase())){
+    banned.push(username.toLowerCase());
+    saveBannedUsers(banned);
+    // Also save to cloud so all users see bans
+    try{ puter.kv.set('aistudio_banned', JSON.stringify(banned)); }catch(e){}
+  }
+  adminLoadUsers();
+}
+
+function adminUnbanUser(username){
+  const banned = getBannedUsers().filter(u=>u!==username.toLowerCase());
+  saveBannedUsers(banned);
+  try{ puter.kv.set('aistudio_banned', JSON.stringify(banned)); }catch(e){}
+  adminLoadUsers();
+}
+
+function adminClearBanned(){
+  saveBannedUsers([]);
+  try{ puter.kv.set('aistudio_banned', JSON.stringify([])); }catch(e){}
+  adminLoadUsers();
+  document.getElementById('sett-saved').textContent='All users unbanned!';
+  document.getElementById('sett-saved').style.color='#00cc66';
+  setTimeout(()=>document.getElementById('sett-saved').textContent='',2000);
+}
+
+function adminLoadUsers(){
+  const accs = lsAccounts();
+  const banned = getBannedUsers();
+  const container = document.getElementById('admin-user-list');
+  if(!container) return;
+  const users = Object.entries(accs);
+  if(!users.length){ container.innerHTML='<div style="color:var(--text4);font-size:11px;padding:8px;">No registered users yet</div>'; return; }
+  container.innerHTML = users.map(([uname, data])=>{
+    const isBanned = banned.includes(uname.toLowerCase());
+    const isAdm = isAdmin(uname);
+    return `<div class="admin-user-row">
+      <span class="aur-name">${uname}${isAdm?'<span class="admin-crown">👑</span>':''}${isBanned?'<span style="color:#ff4466;font-size:9px;margin-left:4px;">[BANNED]</span>':''}</span>
+      <span class="aur-email">${data.email||'—'}</span>
+      <span class="aur-joined">${data.joined||'—'}</span>
+      ${!isAdm ? (isBanned
+        ? `<button class="ban-btn" style="color:#00cc66;border-color:#00cc6644;" onclick="adminUnbanUser('${uname}')">Unban</button>`
+        : `<button class="ban-btn" onclick="adminBanUser('${uname}')">Ban</button>`
+      ) : ''}
+    </div>`;
+  }).join('');
+}
+
+function adminDeleteCommMsg(msgId){
+  // Remove message from PubNub channel (local removal + notify others via special msg)
+  const el = document.getElementById('comm-msg-'+msgId);
+  if(el) el.remove();
+  if(pubnubInst){
+    pubnubInst.publish({ channel: PN_CH, message:{type:'admin_delete', msgId, by: currentUser}}).catch(()=>{});
+  }
+}
+
+// Load banned list from cloud on login
+async function loadBannedFromCloud(){
+  try{
+    const v = await puter.kv.get('aistudio_banned');
+    if(v){ const list = JSON.parse(v); saveBannedUsers(list); }
+  }catch(e){}
+}
 
 // ═══════════════════════════════════════════
 //  THEME
