@@ -646,6 +646,29 @@ select{background:#141428;color:#e8e8f0;border:1px solid #222244;font-family:inh
           <input class="sett-in" id="s-newpw2" type="password" data-i18n-ph="new_pw2" placeholder="Confirm new password">
         </div>
       </div>
+      <!-- API KEYS SECTION -->
+      <div class="sett-sec">
+        <div class="sett-sec-title">⚡ API КЛЮЧИ (для быстрого AI)</div>
+        <div class="sett-field">
+          <label>Groq API Key <span style="color:#00cc66;font-size:9px;">— БЕСПЛАТНО, быстро</span></label>
+          <div style="display:flex;gap:6px;align-items:center;">
+            <input class="sett-in" id="s-groq" type="password" placeholder="gsk_..." style="flex:1;" oninput="updateApiStatus()">
+            <a href="https://console.groq.com/keys" target="_blank" style="padding:9px 10px;background:#141428;color:#00cc66;border:1px solid #00cc6644;border-radius:4px;font-size:10px;text-decoration:none;white-space:nowrap;">Получить →</a>
+          </div>
+          <div id="groq-status" style="font-size:10px;margin-top:5px;color:#444466;">Groq: не настроен — используется Pollinations (медленно)</div>
+        </div>
+        <div class="sett-field">
+          <label>OpenRouter API Key <span style="color:#4285f4;font-size:9px;">— бесплатные модели</span></label>
+          <div style="display:flex;gap:6px;align-items:center;">
+            <input class="sett-in" id="s-orouter" type="password" placeholder="sk-or-..." style="flex:1;" oninput="updateApiStatus()">
+            <a href="https://openrouter.ai/keys" target="_blank" style="padding:9px 10px;background:#141428;color:#4285f4;border:1px solid #4285f444;border-radius:4px;font-size:10px;text-decoration:none;white-space:nowrap;">Получить →</a>
+          </div>
+          <div id="orouter-status" style="font-size:10px;margin-top:5px;color:#444466;">OpenRouter: не настроен</div>
+        </div>
+        <div style="font-size:10px;color:#333355;padding:8px;background:#0a0a18;border-radius:4px;line-height:1.6;border:1px solid #1a1a30;">
+          💡 Ключи хранятся только у тебя в браузере (localStorage). Никуда не отправляются кроме самих API.
+        </div>
+      </div>
       <!-- LANGUAGE SECTION -->
       <div class="sett-sec">
         <div class="sett-sec-title" data-i18n="sett_language">LANGUAGE</div>
@@ -1107,6 +1130,7 @@ function loadSettingsPanel(){
   refreshSwatches();
   updatePreview();
   ['en','ru','de'].forEach(l=>{ const el=document.getElementById('lbtn-'+l); if(el) el.classList.toggle('active',l===currentLang); });
+  loadApiKeysToPanel();
 }
 
 function pickColor(c){ pickedColor=c; refreshSwatches(); updatePreview(); }
@@ -1146,6 +1170,7 @@ async function saveSettings(){
     document.getElementById('s-oldpw').value=''; document.getElementById('s-newpw').value=''; document.getElementById('s-newpw2').value='';
   }
 
+  saveApiKeys();
   saveUD(currentUser, d);
   kvSaveUD(currentUser, d);
   updateTopbar();
@@ -1374,54 +1399,144 @@ const POLL_MODELS = {
   'perplexity/llama-3.1-sonar-large-128k-online': 'searchgpt',
 };
 
-// Free AI via Pollinations
+// ═══ API KEY MANAGEMENT ═══
+function getApiKeys() {
+  return {
+    groq: localStorage.getItem('aistudio_groq_key') || '',
+    openrouter: localStorage.getItem('aistudio_or_key') || ''
+  };
+}
+function saveApiKeys() {
+  const g = document.getElementById('s-groq')?.value?.trim();
+  const o = document.getElementById('s-orouter')?.value?.trim();
+  if(g) localStorage.setItem('aistudio_groq_key', g);
+  else localStorage.removeItem('aistudio_groq_key');
+  if(o) localStorage.setItem('aistudio_or_key', o);
+  else localStorage.removeItem('aistudio_or_key');
+}
+function loadApiKeysToPanel() {
+  const k = getApiKeys();
+  if(document.getElementById('s-groq')) document.getElementById('s-groq').value = k.groq;
+  if(document.getElementById('s-orouter')) document.getElementById('s-orouter').value = k.openrouter;
+  updateApiStatus();
+}
+function updateApiStatus() {
+  const groqEl = document.getElementById('groq-status');
+  const orEl = document.getElementById('orouter-status');
+  const gVal = document.getElementById('s-groq')?.value?.trim();
+  const oVal = document.getElementById('s-orouter')?.value?.trim();
+  if(groqEl) {
+    if(gVal && gVal.startsWith('gsk_')) { groqEl.textContent='✅ Groq: настроен — быстрый AI (Llama, Mixtral)'; groqEl.style.color='#00cc66'; }
+    else if(gVal) { groqEl.textContent='⚠️ Groq: ключ выглядит неверным (должен начинаться с gsk_)'; groqEl.style.color='#f97316'; }
+    else { groqEl.textContent='⭕ Groq: не настроен — используется Pollinations (медленно)'; groqEl.style.color='#444466'; }
+  }
+  if(orEl) {
+    if(oVal && oVal.startsWith('sk-or-')) { orEl.textContent='✅ OpenRouter: настроен'; orEl.style.color='#00cc66'; }
+    else if(oVal) { orEl.textContent='⚠️ OpenRouter: ключ выглядит неверным'; orEl.style.color='#f97316'; }
+    else { orEl.textContent='⭕ OpenRouter: не настроен'; orEl.style.color='#444466'; }
+  }
+}
+
+// Groq model mapping
+const GROQ_MODELS = {
+  'gpt-4o-mini': 'llama-3.1-8b-instant',
+  'gpt-4o': 'llama-3.3-70b-versatile',
+  'gpt-4.1': 'llama-3.3-70b-versatile',
+  'gpt-4.1-mini': 'llama-3.1-8b-instant',
+  'gpt-4.1-nano': 'llama-3.1-8b-instant',
+  'o1': 'deepseek-r1-distill-llama-70b',
+  'o1-mini': 'deepseek-r1-distill-llama-70b',
+  'o3-mini': 'deepseek-r1-distill-llama-70b',
+  'claude-opus-4': 'llama-3.3-70b-versatile',
+  'claude-sonnet-4': 'llama-3.3-70b-versatile',
+  'claude-haiku-4-5': 'llama-3.1-8b-instant',
+  'claude-3-5-sonnet': 'llama-3.3-70b-versatile',
+  'claude-3-opus': 'llama-3.3-70b-versatile',
+  'google/gemini-2.5-pro': 'llama-3.3-70b-versatile',
+  'google/gemini-2.5-flash': 'llama-3.1-70b-versatile',
+  'google/gemini-2.0-flash': 'llama-3.1-8b-instant',
+  'google/gemini-2.0-flash-lite': 'llama-3.1-8b-instant',
+  'meta-llama/llama-4-maverick': 'meta-llama/llama-4-maverick-17b-128e-instruct',
+  'meta-llama/llama-4-scout': 'meta-llama/llama-4-scout-17b-16e-instruct',
+  'meta-llama/llama-3.3-70b-instruct': 'llama-3.3-70b-versatile',
+  'meta-llama/llama-3.1-70b-instruct': 'llama-3.1-70b-versatile',
+  'meta-llama/llama-3.1-8b-instruct': 'llama-3.1-8b-instant',
+  'mistralai/mistral-small-3.1-24b-instruct': 'mistral-saba-24b',
+  'mistralai/mistral-large': 'mistral-large-2411',
+  'mistralai/mixtral-8x7b-instruct': 'mixtral-8x7b-32768',
+  'deepseek/deepseek-r1': 'deepseek-r1-distill-llama-70b',
+  'deepseek/deepseek-r1-0528': 'deepseek-r1-distill-llama-70b',
+  'deepseek/deepseek-v3': 'llama-3.3-70b-versatile',
+  'qwen/qwen3.5-27b': 'qwen-qwq-32b',
+  'qwen/qwen2.5-72b-instruct': 'qwen-qwq-32b',
+  'qwen/qwen2.5-coder-32b': 'qwen-qwq-32b',
+  'qwen/qwq-32b': 'qwen-qwq-32b',
+  'microsoft/phi-4': 'llama-3.1-8b-instant',
+  'microsoft/phi-4-mini': 'llama-3.1-8b-instant',
+};
+
+// Smart AI router: Groq → OpenRouter → Pollinations
 async function callAI(msgs, model) {
+  const keys = getApiKeys();
+
+  // ── GROQ (fastest, free) ──────────────────────
+  if (keys.groq && keys.groq.startsWith('gsk_')) {
+    const groqModel = GROQ_MODELS[model] || 'llama-3.3-70b-versatile';
+    try {
+      const r = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+        method: 'POST',
+        headers: {'Content-Type':'application/json', 'Authorization':'Bearer '+keys.groq},
+        body: JSON.stringify({model: groqModel, messages: msgs, max_tokens: 4096, stream: false})
+      });
+      if (r.ok) {
+        const j = await r.json();
+        const txt = j?.choices?.[0]?.message?.content;
+        if (txt && txt.trim()) return txt.trim();
+      } else {
+        const err = await r.json().catch(()=>({}));
+        if (r.status === 401) throw new Error('Groq: неверный API ключ');
+        if (r.status === 429) console.log('Groq rate limit, falling back...');
+      }
+    } catch(e) { if(e.message.includes('ключ')) throw e; }
+  }
+
+  // ── OPENROUTER (free models available) ────────
+  if (keys.openrouter && keys.openrouter.startsWith('sk-or-')) {
+    try {
+      const r = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+        method: 'POST',
+        headers: {'Content-Type':'application/json', 'Authorization':'Bearer '+keys.openrouter, 'HTTP-Referer':'https://aistudio.app'},
+        body: JSON.stringify({model: 'meta-llama/llama-3.3-70b-instruct:free', messages: msgs})
+      });
+      if (r.ok) {
+        const j = await r.json();
+        const txt = j?.choices?.[0]?.message?.content;
+        if (txt && txt.trim()) return txt.trim();
+      }
+    } catch(e) {}
+  }
+
+  // ── POLLINATIONS (free, no key, slow) ─────────
   const pollModel = POLL_MODELS[model] || 'openai';
+  const lastUser = msgs.filter(m=>m.role==='user').pop();
+  const prompt = typeof lastUser?.content==='string' ? lastUser.content : (lastUser?.content?.find?.(c=>c.type==='text')?.text || 'Hello');
+  const sysMsg = msgs.find(m=>m.role==='system');
 
-  // Attempt 1: Pollinations GET endpoint (most reliable, no CORS issues)
   try {
-    const lastUser = msgs.filter(m=>m.role==='user').pop();
-    const prompt = typeof lastUser?.content==='string' ? lastUser.content : (lastUser?.content?.find?.(c=>c.type==='text')?.text || 'Hello');
-    const sysMsg = msgs.find(m=>m.role==='system');
-    const url = `https://text.pollinations.ai/${encodeURIComponent(prompt)}` +
-      `?model=${encodeURIComponent(pollModel)}` +
-      (sysMsg ? `&system=${encodeURIComponent(sysMsg.content)}` : '') +
-      `&seed=${Math.floor(Math.random()*99999)}`;
+    const url = `https://text.pollinations.ai/${encodeURIComponent(prompt)}?model=${encodeURIComponent(pollModel)}${sysMsg?`&system=${encodeURIComponent(sysMsg.content)}`:''}&seed=${Math.floor(Math.random()*99999)}`;
     const r = await fetch(url);
-    if (r.ok) {
-      const txt = await r.text();
-      if (txt && txt.trim().length > 0) return txt.trim();
-    }
+    if (r.ok) { const txt = await r.text(); if(txt&&txt.trim().length>0) return txt.trim(); }
   } catch(e) {}
 
-  // Attempt 2: Pollinations OpenAI-compatible POST
-  try {
-    const r = await fetch('https://api.pollinations.ai/v1/chat/completions', {
-      method: 'POST',
-      headers: {'Content-Type':'application/json'},
-      body: JSON.stringify({model: pollModel, messages: msgs})
-    });
-    if (r.ok) {
-      const j = await r.json();
-      const txt = j?.choices?.[0]?.message?.content;
-      if (txt && txt.trim()) return txt.trim();
-    }
-  } catch(e) {}
-
-  // Attempt 3: Pollinations main POST
   try {
     const r = await fetch('https://text.pollinations.ai/', {
-      method: 'POST',
-      headers: {'Content-Type':'application/json'},
-      body: JSON.stringify({messages: msgs, model: pollModel, stream: false})
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({messages:msgs, model:pollModel, stream:false})
     });
-    if (r.ok) {
-      const txt = await r.text();
-      if (txt && txt.trim().length > 2) return txt.trim();
-    }
+    if (r.ok) { const txt = await r.text(); if(txt&&txt.trim().length>2) return txt.trim(); }
   } catch(e) {}
 
-  throw new Error('AI недоступен. Проверьте интернет-соединение.');
+  throw new Error('AI недоступен. Добавьте Groq API ключ в Настройки для быстрой работы.');
 }
 
 async function sendMsg(){
