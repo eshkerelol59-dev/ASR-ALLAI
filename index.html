@@ -529,6 +529,33 @@ body.light .topbar-logo{color:var(--accent);}
 .aur-name{flex:1;color:var(--text);}
 .aur-email{color:var(--text3);font-size:10px;min-width:120px;}
 .aur-joined{color:var(--text4);font-size:9px;min-width:70px;}
+
+/* ═══ FILE ATTACHMENTS ═══ */
+.file-queue{display:flex;flex-wrap:wrap;gap:5px;margin:4px 0;}
+.file-chip{display:flex;align-items:center;gap:5px;padding:4px 8px;background:var(--bg3);border:1px solid var(--border2);border-radius:20px;font-size:10px;color:var(--text2);max-width:180px;}
+.file-chip-icon{font-size:13px;flex-shrink:0;}
+.file-chip-name{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1;}
+.file-chip-size{color:var(--text4);font-size:9px;flex-shrink:0;}
+.file-chip-rm{background:none;border:none;color:var(--text4);cursor:pointer;padding:0 0 0 2px;font-size:12px;line-height:1;}
+.file-chip-rm:hover{color:var(--accent);}
+.file-attach-btn{display:flex;align-items:center;gap:4px;}
+body.light .file-chip{background:var(--bg3);border-color:var(--border2);}
+
+/* ═══ COMMUNITY FILE SHARING ═══ */
+.comm-file-preview{display:flex;align-items:center;gap:8px;padding:8px 10px;background:var(--bg);border:1px solid var(--border2);border-radius:6px;margin-top:6px;cursor:pointer;transition:border-color .2s;text-decoration:none;}
+.comm-file-preview:hover{border-color:var(--accent);}
+.comm-file-preview .cf-icon{font-size:22px;flex-shrink:0;}
+.comm-file-preview .cf-info{flex:1;min-width:0;}
+.comm-file-preview .cf-name{font-size:11px;color:var(--text);font-weight:bold;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.comm-file-preview .cf-size{font-size:10px;color:var(--text3);}
+.comm-file-preview .cf-dl{font-size:10px;color:var(--accent);flex-shrink:0;}
+.comm-attach-btn{padding:8px 10px;background:var(--bg3);border:1px solid var(--border2);color:var(--text3);cursor:pointer;font-size:14px;border-radius:3px;transition:all .2s;}
+.comm-attach-btn:hover{border-color:var(--accent);color:var(--accent);}
+.comm-pending-file{display:flex;align-items:center;gap:6px;padding:5px 8px;background:var(--bg3);border:1px solid var(--border2);border-radius:4px;font-size:10px;color:var(--text2);margin-bottom:4px;}
+.comm-pending-file button{background:none;border:none;color:var(--text4);cursor:pointer;font-size:13px;padding:0;margin-left:auto;}
+.comm-pending-file button:hover{color:var(--accent);}
+body.light .comm-file-preview{background:var(--bg2);}
+body.light .comm-pending-file{background:var(--bg3);}
 </style>
 </head>
 <body>
@@ -634,17 +661,20 @@ body.light .topbar-logo{color:var(--accent);}
           </div>
           <div id="ml-items"></div>
         </div>
-        <div class="drop-zone" id="drop-zone" onclick="document.getElementById('img-file').click()" ondragover="onDragOver(event)" ondragleave="onDragLeave()" ondrop="onDrop(event)">
+        <div class="drop-zone" id="drop-zone" onclick="document.getElementById('img-file').click()" ondragover="onDragOver(event)" ondragleave="onDragLeave()" ondrop="onDropAll(event)">
           <input type="file" id="img-file" accept="image/*" multiple style="display:none" onchange="handleImgs(event)">
-          <div id="drop-hint" data-i18n="drop_hint">📎 Drop images or click (up to 5)</div>
+          <input type="file" id="doc-file" accept=".txt,.md,.pdf,.docx,.doc,.json,.csv,.py,.js,.ts,.html,.css,.xml,.yaml,.yml,.log,.rtf,.tex,.c,.cpp,.java,.rs,.go,.php,.rb,.swift,.kt" multiple style="display:none" onchange="handleFiles(event)">
+          <div id="drop-hint" data-i18n="drop_hint">📎 Перетащи файлы или нажми · Изображения и документы</div>
           <div class="img-queue" id="img-queue"></div>
+          <div class="file-queue" id="file-queue"></div>
           <div class="img-count" id="img-count"></div>
         </div>
         <div id="chat-box"></div>
         <div class="chat-toolbar">
-          <button class="tool-btn" onclick="document.getElementById('img-file').click()" data-i18n="add_images">+ Images</button>
-          <button class="tool-btn" onclick="clearImgs()"   data-i18n="clear_images">Clear Images</button>
-          <button class="tool-btn" onclick="clearChat()"   data-i18n="clear_chat">Clear Chat</button>
+          <button class="tool-btn" onclick="document.getElementById('img-file').click()">🖼 Картинка</button>
+          <button class="tool-btn" onclick="document.getElementById('doc-file').click()">📄 Файл</button>
+          <button class="tool-btn" onclick="clearAll()">🗑 Очистить</button>
+          <button class="tool-btn" onclick="clearChat()" data-i18n="clear_chat">↺ Чат</button>
         </div>
         <div class="chat-row">
           <input id="chat-in" type="text" data-i18n-ph="chat_ph" placeholder="Type a message..." onkeydown="if(event.key==='Enter')sendMsg()">
@@ -1590,6 +1620,71 @@ function renderImgQueue(){
 }
 function clearImgs(){ uploadedImgs=[]; renderImgQueue(); }
 
+// ── FILE ATTACHMENTS ────────────────────────────────────────────────
+const MAX_FILES = 5;
+let attachedFiles = []; // [{name, size, type, text, b64}]
+
+const FILE_ICONS = {
+  'pdf':'📕', 'doc':'📘', 'docx':'📘', 'txt':'📄', 'md':'📝',
+  'json':'🔧', 'csv':'📊', 'py':'🐍', 'js':'⚡', 'ts':'⚡',
+  'html':'🌐', 'css':'🎨', 'xml':'📋', 'yaml':'📋', 'yml':'📋',
+  'log':'🗒', 'c':'⚙️', 'cpp':'⚙️', 'java':'☕', 'rs':'🦀',
+  'go':'🐹', 'php':'🐘', 'rb':'💎', 'swift':'🍎', 'kt':'📱',
+};
+function fileIcon(name){ const ext=(name.split('.').pop()||'').toLowerCase(); return FILE_ICONS[ext]||'📄'; }
+function fmtSize(b){ if(b<1024) return b+'B'; if(b<1048576) return (b/1024).toFixed(1)+'KB'; return (b/1048576).toFixed(1)+'MB'; }
+
+async function handleFiles(e){
+  const files = [...e.target.files]; e.target.value='';
+  const rem = MAX_FILES - attachedFiles.length;
+  for(const f of files.slice(0,rem)){
+    if(f.size > 2*1024*1024){ alert(f.name+' слишком большой (макс 2MB)'); continue; }
+    await readFileContent(f);
+  }
+  renderFileQueue();
+}
+
+function readFileContent(f){
+  return new Promise(resolve=>{
+    const ext = (f.name.split('.').pop()||'').toLowerCase();
+    const textTypes = ['txt','md','json','csv','py','js','ts','html','css','xml','yaml','yml','log','rtf','tex','c','cpp','java','rs','go','php','rb','swift','kt'];
+    const r = new FileReader();
+    if(textTypes.includes(ext)){
+      r.onload = ev => { attachedFiles.push({name:f.name, size:f.size, type:'text', text:ev.target.result}); resolve(); };
+      r.readAsText(f);
+    } else {
+      // binary (pdf, docx etc) — send as base64 and tell AI the filename
+      r.onload = ev => { attachedFiles.push({name:f.name, size:f.size, type:'binary', b64:ev.target.result.split(',')[1], mime:f.type}); resolve(); };
+      r.readAsDataURL(f);
+    }
+  });
+}
+
+function renderFileQueue(){
+  const q = document.getElementById('file-queue'); if(!q) return;
+  q.innerHTML = '';
+  attachedFiles.forEach((f,i)=>{
+    const chip = document.createElement('div'); chip.className='file-chip';
+    chip.innerHTML = `<span class="file-chip-icon">${fileIcon(f.name)}</span><span class="file-chip-name">${f.name}</span><span class="file-chip-size">${fmtSize(f.size)}</span><button class="file-chip-rm" onclick="removeFile(${i})">×</button>`;
+    q.appendChild(chip);
+  });
+}
+
+function removeFile(i){ attachedFiles.splice(i,1); renderFileQueue(); }
+function clearFiles(){ attachedFiles=[]; renderFileQueue(); }
+function clearAll(){ clearImgs(); clearFiles(); }
+
+// Override onDrop to handle both images and files
+function onDropAll(e){
+  e.preventDefault();
+  document.getElementById('drop-zone').classList.remove('dragover');
+  const files = [...e.dataTransfer.files];
+  const imgs = files.filter(f=>f.type.startsWith('image/'));
+  const docs = files.filter(f=>!f.type.startsWith('image/'));
+  if(imgs.length) loadImgFiles(imgs);
+  if(docs.length){ Promise.all(docs.map(readFileContent)).then(renderFileQueue); }
+}
+
 // ═══════════════════════════════════════════
 //  AI CHAT
 // ═══════════════════════════════════════════
@@ -2071,13 +2166,52 @@ function announceJoin(){
   pubnubInst.publish({ channel:PN_CH, message:{type:'join',user:currentUser,dispName,col}}).catch(()=>{});
 }
 
+// Community file state
+let commPendingFile = null; // {name, size, mime, dataUrl, text}
+
+function handleCommFile(e){
+  const f = e.target.files[0]; e.target.value='';
+  if(!f) return;
+  if(f.size > 500*1024){ alert('Файл слишком большой. Макс 500KB для отправки в чат.'); return; }
+  const reader = new FileReader();
+  reader.onload = ev => {
+    const isText = f.type.startsWith('text/') || /\.(txt|md|json|csv|py|js|ts|html|css|xml|yaml|yml|log|c|cpp|java|rs|go|rb|php|swift|kt)$/i.test(f.name);
+    commPendingFile = {
+      name: f.name, size: f.size, mime: f.type,
+      dataUrl: ev.target.result,
+      text: isText ? ev.target.result : null
+    };
+    document.getElementById('comm-pf-icon').textContent = fileIcon(f.name);
+    document.getElementById('comm-pf-name').textContent = f.name;
+    document.getElementById('comm-pf-size').textContent = fmtSize(f.size);
+    document.getElementById('comm-pending-file').style.display='flex';
+  };
+  reader.readAsDataURL(f);
+}
+
+function clearCommFile(){
+  commPendingFile = null;
+  document.getElementById('comm-pending-file').style.display='none';
+}
+
 function sendComm(){
   if(isUserBanned(currentUser)){ setCommStatus('🚫 Вы заблокированы',false); return; }
   if(!pubnubInst||!currentUser){ setCommStatus(t('comm_failed'),false); return; }
-  const inp=document.getElementById('comm-in'); const txt=inp.value.trim(); if(!txt) return;
+  const inp=document.getElementById('comm-in'); const txt=inp.value.trim();
+  if(!txt && !commPendingFile) return;
   const d=loadUD(currentUser); const col=d.avatarColor||autoColor(currentUser); const dispName=d.displayName||currentUser;
   inp.value='';
-  pubnubInst.publish({ channel:PN_CH, message:{type:'msg',user:currentUser,dispName,col,text:txt,ts:Date.now()} }).catch(e=>setCommStatus('Error: '+e.message,false));
+
+  if(commPendingFile){
+    const f = commPendingFile; clearCommFile();
+    pubnubInst.publish({ channel:PN_CH, message:{
+      type:'file', user:currentUser, dispName, col, ts:Date.now(),
+      text: txt||null,
+      file:{ name:f.name, size:f.size, mime:f.mime, dataUrl:f.dataUrl }
+    }}).catch(e=>setCommStatus('Error: '+e.message,false));
+  } else {
+    pubnubInst.publish({ channel:PN_CH, message:{type:'msg',user:currentUser,dispName,col,text:txt,ts:Date.now()} }).catch(e=>setCommStatus('Error: '+e.message,false));
+  }
 }
 
 function displayCommMsg(msg){
@@ -2089,7 +2223,8 @@ function displayCommMsg(msg){
   if(msg.type==='admin_delete'){
     const el=document.getElementById('comm-msg-'+msg.msgId); if(el) el.remove(); return;
   }
-  if(msg.type!=='msg') return;
+  const isFile = msg.type==='file';
+  if(msg.type!=='msg' && !isFile) return;
   // Block banned users
   if(isUserBanned(msg.user||'')) return;
   const msgId = msg.ts ? String(msg.ts) : String(Date.now()+Math.random());
@@ -2101,9 +2236,24 @@ function displayCommMsg(msg){
   const name=document.createElement('div'); name.className='comm-name';
   name.innerHTML=(msg.dispName||msg.user)+(senderIsAdmin?'<span class="admin-badge">ADMIN</span>':'')+
     (isAdmin(currentUser)&&!isOwn?`<button class="msg-del-btn" onclick="adminDeleteCommMsg('${msgId}')" title="Delete">🗑</button><button class="ban-btn" onclick="adminBanUser('${msg.user}')" title="Ban user">🚫</button>`:'');
-  const text=document.createElement('div'); text.className='comm-text'; text.textContent=msg.text;
   const time=document.createElement('div'); time.className='comm-time'; time.textContent=msg.ts?new Date(msg.ts).toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'}):'';
-  bubble.appendChild(name); bubble.appendChild(text); bubble.appendChild(time);
+  if(isFile && msg.file){
+    if(msg.text){ const t2=document.createElement('div'); t2.className='comm-text'; t2.textContent=msg.text; bubble.appendChild(t2); }
+    const fp=document.createElement('a'); fp.className='comm-file-preview'; fp.href=msg.file.dataUrl; fp.download=msg.file.name; fp.title='Скачать '+msg.file.name;
+    const isImg = (msg.file.mime||'').startsWith('image/');
+    if(isImg){
+      const im=document.createElement('img'); im.src=msg.file.dataUrl; im.style.cssText='max-width:200px;max-height:160px;border-radius:4px;display:block;margin-top:4px;cursor:pointer;';
+      im.onclick=()=>{ const w=window.open(); w.document.write('<img src="'+msg.file.dataUrl+'" style="max-width:100%;"/>'); };
+      bubble.appendChild(im);
+    } else {
+      fp.innerHTML=`<span class="cf-icon">${fileIcon(msg.file.name)}</span><span class="cf-info"><span class="cf-name">${msg.file.name}</span><span class="cf-size">${fmtSize(msg.file.size)}</span></span><span class="cf-dl">⬇ скачать</span>`;
+      bubble.appendChild(fp);
+    }
+  } else {
+    const text=document.createElement('div'); text.className='comm-text'; text.textContent=msg.text||'';
+    bubble.appendChild(text);
+  }
+  bubble.appendChild(time);
   d.appendChild(av); d.appendChild(bubble);
   box.appendChild(d); scrollCommBox();
 }
