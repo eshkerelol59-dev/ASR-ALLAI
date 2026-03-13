@@ -1486,46 +1486,53 @@ function getSysPr(){ if(currentMode==='custom'){ return document.getElementById(
 //  MODELS
 // ═══════════════════════════════════════════
 const ALL_MODELS=[
-  {id:'gpt-4o-mini',name:'GPT-4o Mini',provider:'OpenAI',badge:'m-openai'},
-  {id:'gpt-4o',name:'GPT-4o',provider:'OpenAI',badge:'m-openai'},
-  {id:'gpt-4.1',name:'GPT-4.1',provider:'OpenAI',badge:'m-openai'},
-  {id:'gpt-4.1-mini',name:'GPT-4.1 Mini',provider:'OpenAI',badge:'m-openai'},
-  {id:'gpt-4.1-nano',name:'GPT-4.1 Nano',provider:'OpenAI',badge:'m-openai'},
-  {id:'o1',name:'o1',provider:'OpenAI',badge:'m-openai'},
-  {id:'o1-mini',name:'o1 Mini',provider:'OpenAI',badge:'m-openai'},
-  {id:'o3-mini',name:'o3 Mini',provider:'OpenAI',badge:'m-openai'},
-  {id:'claude-opus-4',name:'Claude Opus 4',provider:'Anthropic',badge:'m-claude'},
-  {id:'claude-sonnet-4',name:'Claude Sonnet 4',provider:'Anthropic',badge:'m-claude'},
-  {id:'claude-haiku-4-5',name:'Claude Haiku 4.5',provider:'Anthropic',badge:'m-claude'},
-  {id:'claude-3-5-sonnet',name:'Claude 3.5 Sonnet',provider:'Anthropic',badge:'m-claude'},
-  {id:'claude-3-opus',name:'Claude 3 Opus',provider:'Anthropic',badge:'m-claude'},
-  {id:'google/gemini-2.5-pro',name:'Gemini 2.5 Pro',provider:'Google',badge:'m-google'},
-  {id:'google/gemini-2.5-flash',name:'Gemini 2.5 Flash',provider:'Google',badge:'m-google'},
-  {id:'google/gemini-2.0-flash',name:'Gemini 2.0 Flash',provider:'Google',badge:'m-google'},
-  {id:'google/gemini-2.0-flash-lite',name:'Gemini 2.0 Flash Lite',provider:'Google',badge:'m-google'},
-  {id:'google/gemini-1.5-pro',name:'Gemini 1.5 Pro',provider:'Google',badge:'m-google'},
-  {id:'google/gemini-1.5-flash',name:'Gemini 1.5 Flash',provider:'Google',badge:'m-google'},
-  {id:'meta-llama/llama-4-maverick',name:'Llama 4 Maverick',provider:'Meta',badge:'m-meta'},
-  {id:'meta-llama/llama-4-scout',name:'Llama 4 Scout',provider:'Meta',badge:'m-meta'},
-  {id:'meta-llama/llama-3.3-70b-instruct',name:'Llama 3.3 70B',provider:'Meta',badge:'m-meta'},
-  {id:'meta-llama/llama-3.1-70b-instruct',name:'Llama 3.1 70B',provider:'Meta',badge:'m-meta'},
-  {id:'meta-llama/llama-3.1-8b-instruct',name:'Llama 3.1 8B',provider:'Meta',badge:'m-meta'},
-  {id:'mistralai/mistral-small-3.1-24b-instruct',name:'Mistral Small 3.1',provider:'Mistral',badge:'m-other'},
-  {id:'mistralai/mistral-large',name:'Mistral Large',provider:'Mistral',badge:'m-other'},
-  {id:'mistralai/mixtral-8x7b-instruct',name:'Mixtral 8x7B',provider:'Mistral',badge:'m-other'},
-  {id:'deepseek/deepseek-r1',name:'DeepSeek R1',provider:'DeepSeek',badge:'m-other'},
-  {id:'deepseek/deepseek-r1-0528',name:'DeepSeek R1 0528',provider:'DeepSeek',badge:'m-other'},
-  {id:'deepseek/deepseek-v3',name:'DeepSeek V3',provider:'DeepSeek',badge:'m-other'},
-  {id:'qwen/qwen3.5-27b',name:'Qwen 3.5 27B',provider:'Alibaba',badge:'m-other'},
-  {id:'qwen/qwen2.5-72b-instruct',name:'Qwen 2.5 72B',provider:'Alibaba',badge:'m-other'},
-  {id:'qwen/qwen2.5-coder-32b',name:'Qwen 2.5 Coder',provider:'Alibaba',badge:'m-other'},
-  {id:'qwen/qwq-32b',name:'QwQ 32B',provider:'Alibaba',badge:'m-other'},
-  {id:'microsoft/phi-4',name:'Phi-4',provider:'Microsoft',badge:'m-other'},
-  {id:'microsoft/phi-4-mini',name:'Phi-4 Mini',provider:'Microsoft',badge:'m-other'},
-  {id:'cohere/command-r-plus',name:'Command R+',provider:'Cohere',badge:'m-other'},
-  {id:'cohere/command-r',name:'Command R',provider:'Cohere',badge:'m-other'},
-  {id:'nousresearch/hermes-3-llama-3.1-405b',name:'Hermes 3 405B',provider:'Nous',badge:'m-other'},
-  {id:'perplexity/llama-3.1-sonar-large-128k-online',name:'Sonar Large Online',provider:'Perplexity',badge:'m-other'}
+  // ── OpenAI (via Pollinations openai / openai-fast / openai-reasoning) ──
+  {id:'gpt-4o',        name:'GPT-4o',          provider:'OpenAI',     badge:'m-openai', note:'✓ fast'},
+  {id:'gpt-4o-mini',   name:'GPT-4o Mini',     provider:'OpenAI',     badge:'m-openai', note:'✓ fast'},
+  {id:'o3-mini',       name:'o3 Mini',         provider:'OpenAI',     badge:'m-openai', note:'reasoning'},
+  {id:'o1-mini',       name:'o1 Mini',         provider:'OpenAI',     badge:'m-openai', note:'reasoning'},
+  // ── Anthropic (via Pollinations claude-hybridspace) ──
+  {id:'claude-3-5-sonnet',   name:'Claude 3.5 Sonnet', provider:'Anthropic', badge:'m-claude', note:'✓ smart'},
+  {id:'claude-3-5-haiku',    name:'Claude 3.5 Haiku',  provider:'Anthropic', badge:'m-claude', note:'✓ fast'},
+  {id:'claude-3-opus',       name:'Claude 3 Opus',     provider:'Anthropic', badge:'m-claude', note:'powerful'},
+  // ── Google (via Pollinations gemini) ──
+  {id:'gemini-2.0-flash',    name:'Gemini 2.0 Flash',  provider:'Google',    badge:'m-google', note:'✓ fast'},
+  {id:'gemini-2.5-pro',      name:'Gemini 2.5 Pro',    provider:'Google',    badge:'m-google', note:'smart'},
+  {id:'gemini-2.5-flash',    name:'Gemini 2.5 Flash',  provider:'Google',    badge:'m-google', note:'✓ fast'},
+  // ── Meta Llama (via Groq native / Pollinations llama) ──
+  {id:'llama-4-maverick',    name:'Llama 4 Maverick',  provider:'Meta',      badge:'m-meta',   note:'⚡ Groq'},
+  {id:'llama-4-scout',       name:'Llama 4 Scout',     provider:'Meta',      badge:'m-meta',   note:'⚡ Groq'},
+  {id:'llama-3.3-70b',       name:'Llama 3.3 70B',     provider:'Meta',      badge:'m-meta',   note:'⚡ Groq'},
+  {id:'llama-3.1-70b',       name:'Llama 3.1 70B',     provider:'Meta',      badge:'m-meta',   note:'⚡ Groq'},
+  {id:'llama-3.1-8b',        name:'Llama 3.1 8B',      provider:'Meta',      badge:'m-meta',   note:'⚡ fast'},
+  // ── Mistral (via Groq native / Pollinations mistral) ──
+  {id:'mixtral-8x7b',        name:'Mixtral 8x7B',      provider:'Mistral',   badge:'m-other',  note:'⚡ Groq'},
+  {id:'mistral-saba',        name:'Mistral Saba 24B',  provider:'Mistral',   badge:'m-other',  note:'⚡ Groq'},
+  {id:'mistral-large',       name:'Mistral Large 2',   provider:'Mistral',   badge:'m-other',  note:'smart'},
+  {id:'mistral-nemo',        name:'Mistral Nemo',      provider:'Mistral',   badge:'m-other',  note:'fast'},
+  // ── DeepSeek (via Groq / Pollinations) ──
+  {id:'deepseek-r1',         name:'DeepSeek R1',       provider:'DeepSeek',  badge:'m-other',  note:'⚡ reasoning'},
+  {id:'deepseek-r1-0528',    name:'DeepSeek R1 0528',  provider:'DeepSeek',  badge:'m-other',  note:'⚡ latest'},
+  {id:'deepseek-v3',         name:'DeepSeek V3',       provider:'DeepSeek',  badge:'m-other',  note:'smart'},
+  // ── Qwen / Alibaba (via Groq / Pollinations) ──
+  {id:'qwq-32b',             name:'QwQ 32B',           provider:'Alibaba',   badge:'m-other',  note:'⚡ reasoning'},
+  {id:'qwen-2.5-72b',        name:'Qwen 2.5 72B',      provider:'Alibaba',   badge:'m-other',  note:'smart'},
+  {id:'qwen-2.5-coder',      name:'Qwen 2.5 Coder',    provider:'Alibaba',   badge:'m-other',  note:'code'},
+  // ── Google Gemma (via Groq native) ──
+  {id:'gemma-3-27b',         name:'Gemma 3 27B',       provider:'Google',    badge:'m-google', note:'⚡ Groq'},
+  {id:'gemma-3-12b',         name:'Gemma 3 12B',       provider:'Google',    badge:'m-google', note:'⚡ Groq'},
+  {id:'gemma-3-4b',          name:'Gemma 3 4B',        provider:'Google',    badge:'m-google', note:'⚡ tiny'},
+  // ── Microsoft ──
+  {id:'phi-4',               name:'Phi-4',             provider:'Microsoft', badge:'m-other',  note:'smart'},
+  {id:'phi-4-mini',          name:'Phi-4 Mini',        provider:'Microsoft', badge:'m-other',  note:'tiny'},
+  // ── Cohere ──
+  {id:'command-r-plus',      name:'Command R+',        provider:'Cohere',    badge:'m-other',  note:'search'},
+  {id:'command-r',           name:'Command R',         provider:'Cohere',    badge:'m-other',  note:'fast'},
+  // ── Nous ──
+  {id:'hermes-3-405b',       name:'Hermes 3 405B',     provider:'Nous',      badge:'m-other',  note:'large'},
+  // ── Perplexity / Search ──
+  {id:'sonar-online',        name:'Sonar Online',      provider:'Perplexity',badge:'m-other',  note:'🌐 web'},
+  {id:'sonar-pro',           name:'Sonar Pro',         provider:'Perplexity',badge:'m-other',  note:'🌐 web'},
 ];
 let ratings={}, currentSort='rating', selectedModel=ALL_MODELS[0].id, mlOpen=false;
 
@@ -1551,7 +1558,7 @@ function getSortedModels(){
 function buildML(){
   const c=document.getElementById('ml-items'); c.innerHTML='';
   getSortedModels().forEach(m=>{
-    const d2=document.createElement('div'); d2.className='model-item'+(m.id===selectedModel?' selected':''); d2.onclick=()=>selectModel(m.id);
+    const d2=document.createElement('div'); d2.className='model-item'+(m.id===selectedModel?' selected':''); d2.onclick=()=>selectModel(m.id); d2.title=m.note||'';
     const sc=getScore(m.id); const cls=sc===null?'neu':sc>0?'good':'bad'; const st=sc===null?'—':sc>0?'+'+sc:String(sc);
     d2.innerHTML=`<span class="mi-name">${m.name}</span><span class="mi-prov">${m.provider}</span><span class="mi-sc ${cls}">${st}</span>`;
     c.appendChild(d2);
@@ -1700,46 +1707,51 @@ function clearChat(){ chatHistory=[]; document.getElementById('chat-box').innerH
 
 // Map our model IDs to Pollinations model names
 const POLL_MODELS = {
-  'gpt-4o-mini':     'openai',
-  'gpt-4o':          'openai',
-  'gpt-4.1':         'openai',
-  'gpt-4.1-mini':    'openai-fast',
-  'gpt-4.1-nano':    'openai-fast',
-  'o1':              'openai-reasoning',
-  'o1-mini':         'openai-reasoning',
-  'o3-mini':         'openai-reasoning',
-  'claude-opus-4':         'claude-hybridspace',
-  'claude-sonnet-4':       'claude-hybridspace',
-  'claude-haiku-4-5':      'claude-hybridspace',
-  'claude-3-5-sonnet':     'claude-hybridspace',
-  'claude-3-opus':         'claude-hybridspace',
-  'google/gemini-2.5-pro':       'gemini',
-  'google/gemini-2.5-flash':     'gemini',
-  'google/gemini-2.0-flash':     'gemini',
-  'google/gemini-2.0-flash-lite':'gemini',
-  'google/gemini-1.5-pro':       'gemini',
-  'google/gemini-1.5-flash':     'gemini',
-  'meta-llama/llama-4-maverick':        'llama',
-  'meta-llama/llama-4-scout':           'llama',
-  'meta-llama/llama-3.3-70b-instruct':  'llama',
-  'meta-llama/llama-3.1-70b-instruct':  'llama',
-  'meta-llama/llama-3.1-8b-instruct':   'llama',
-  'mistralai/mistral-small-3.1-24b-instruct': 'mistral',
-  'mistralai/mistral-large':             'mistral',
-  'mistralai/mixtral-8x7b-instruct':     'mistral',
-  'deepseek/deepseek-r1':      'deepseek-reasoning',
-  'deepseek/deepseek-r1-0528': 'deepseek-reasoning',
-  'deepseek/deepseek-v3':      'deepseek',
-  'qwen/qwen3.5-27b':            'qwen',
-  'qwen/qwen2.5-72b-instruct':   'qwen',
-  'qwen/qwen2.5-coder-32b':      'qwen-coder',
-  'qwen/qwq-32b':                'qwen',
-  'microsoft/phi-4':             'phi',
-  'microsoft/phi-4-mini':        'phi',
-  'cohere/command-r-plus':       'command-r',
-  'cohere/command-r':            'command-r',
-  'nousresearch/hermes-3-llama-3.1-405b': 'llama',
-  'perplexity/llama-3.1-sonar-large-128k-online': 'searchgpt',
+  // OpenAI
+  'gpt-4o':             'openai',
+  'gpt-4o-mini':        'openai-fast',
+  'o1-mini':            'openai-reasoning',
+  'o3-mini':            'openai-reasoning',
+  // Anthropic
+  'claude-3-5-sonnet':  'claude-hybridspace',
+  'claude-3-5-haiku':   'claude-hybridspace',
+  'claude-3-opus':      'claude-hybridspace',
+  // Google
+  'gemini-2.0-flash':   'gemini',
+  'gemini-2.5-pro':     'gemini',
+  'gemini-2.5-flash':   'gemini',
+  'gemma-3-27b':        'gemini',
+  'gemma-3-12b':        'gemini',
+  'gemma-3-4b':         'gemini',
+  // Meta
+  'llama-4-maverick':   'llama',
+  'llama-4-scout':      'llama',
+  'llama-3.3-70b':      'llama',
+  'llama-3.1-70b':      'llama',
+  'llama-3.1-8b':       'llama',
+  // Mistral
+  'mixtral-8x7b':       'mistral',
+  'mistral-saba':       'mistral',
+  'mistral-large':      'mistral',
+  'mistral-nemo':       'mistral',
+  // DeepSeek
+  'deepseek-r1':        'deepseek-reasoning',
+  'deepseek-r1-0528':   'deepseek-reasoning',
+  'deepseek-v3':        'deepseek',
+  // Qwen
+  'qwq-32b':            'qwen',
+  'qwen-2.5-72b':       'qwen',
+  'qwen-2.5-coder':     'qwen-coder',
+  // Microsoft
+  'phi-4':              'phi',
+  'phi-4-mini':         'phi',
+  // Cohere
+  'command-r-plus':     'command-r',
+  'command-r':          'command-r',
+  // Nous / Perplexity
+  'hermes-3-405b':      'llama',
+  'sonar-online':       'searchgpt',
+  'sonar-pro':          'searchgpt',
 };
 
 // ═══ API KEY MANAGEMENT ═══
@@ -1780,42 +1792,45 @@ function updateApiStatus() {
   }
 }
 
-// Groq model mapping
+// Groq model mapping (exact Groq API model IDs)
 const GROQ_MODELS = {
-  'gpt-4o-mini': 'llama-3.1-8b-instant',
-  'gpt-4o': 'llama-3.3-70b-versatile',
-  'gpt-4.1': 'llama-3.3-70b-versatile',
-  'gpt-4.1-mini': 'llama-3.1-8b-instant',
-  'gpt-4.1-nano': 'llama-3.1-8b-instant',
-  'o1': 'deepseek-r1-distill-llama-70b',
-  'o1-mini': 'deepseek-r1-distill-llama-70b',
-  'o3-mini': 'deepseek-r1-distill-llama-70b',
-  'claude-opus-4': 'llama-3.3-70b-versatile',
-  'claude-sonnet-4': 'llama-3.3-70b-versatile',
-  'claude-haiku-4-5': 'llama-3.1-8b-instant',
+  // Use Groq native models directly where available
+  'llama-4-maverick':  'meta-llama/llama-4-maverick-17b-128e-instruct',
+  'llama-4-scout':     'meta-llama/llama-4-scout-17b-16e-instruct',
+  'llama-3.3-70b':     'llama-3.3-70b-versatile',
+  'llama-3.1-70b':     'llama-3.1-70b-versatile',
+  'llama-3.1-8b':      'llama-3.1-8b-instant',
+  'mixtral-8x7b':      'mixtral-8x7b-32768',
+  'mistral-saba':      'mistral-saba-24b',
+  'mistral-large':     'mistral-large-2411',
+  'deepseek-r1':       'deepseek-r1-distill-llama-70b',
+  'deepseek-r1-0528':  'deepseek-r1-distill-llama-70b',
+  'qwq-32b':           'qwen-qwq-32b',
+  'qwen-2.5-72b':      'qwen-qwq-32b',
+  'qwen-2.5-coder':    'qwen-qwq-32b',
+  'gemma-3-27b':       'gemma2-9b-it',
+  'gemma-3-12b':       'gemma2-9b-it',
+  'gemma-3-4b':        'gemma2-9b-it',
+  // Fallback for non-Groq models: use best available
+  'gpt-4o':            'llama-3.3-70b-versatile',
+  'gpt-4o-mini':       'llama-3.1-8b-instant',
+  'o1-mini':           'deepseek-r1-distill-llama-70b',
+  'o3-mini':           'deepseek-r1-distill-llama-70b',
   'claude-3-5-sonnet': 'llama-3.3-70b-versatile',
-  'claude-3-opus': 'llama-3.3-70b-versatile',
-  'google/gemini-2.5-pro': 'llama-3.3-70b-versatile',
-  'google/gemini-2.5-flash': 'llama-3.1-70b-versatile',
-  'google/gemini-2.0-flash': 'llama-3.1-8b-instant',
-  'google/gemini-2.0-flash-lite': 'llama-3.1-8b-instant',
-  'meta-llama/llama-4-maverick': 'meta-llama/llama-4-maverick-17b-128e-instruct',
-  'meta-llama/llama-4-scout': 'meta-llama/llama-4-scout-17b-16e-instruct',
-  'meta-llama/llama-3.3-70b-instruct': 'llama-3.3-70b-versatile',
-  'meta-llama/llama-3.1-70b-instruct': 'llama-3.1-70b-versatile',
-  'meta-llama/llama-3.1-8b-instruct': 'llama-3.1-8b-instant',
-  'mistralai/mistral-small-3.1-24b-instruct': 'mistral-saba-24b',
-  'mistralai/mistral-large': 'mistral-large-2411',
-  'mistralai/mixtral-8x7b-instruct': 'mixtral-8x7b-32768',
-  'deepseek/deepseek-r1': 'deepseek-r1-distill-llama-70b',
-  'deepseek/deepseek-r1-0528': 'deepseek-r1-distill-llama-70b',
-  'deepseek/deepseek-v3': 'llama-3.3-70b-versatile',
-  'qwen/qwen3.5-27b': 'qwen-qwq-32b',
-  'qwen/qwen2.5-72b-instruct': 'qwen-qwq-32b',
-  'qwen/qwen2.5-coder-32b': 'qwen-qwq-32b',
-  'qwen/qwq-32b': 'qwen-qwq-32b',
-  'microsoft/phi-4': 'llama-3.1-8b-instant',
-  'microsoft/phi-4-mini': 'llama-3.1-8b-instant',
+  'claude-3-5-haiku':  'llama-3.1-8b-instant',
+  'claude-3-opus':     'llama-3.3-70b-versatile',
+  'gemini-2.0-flash':  'llama-3.3-70b-versatile',
+  'gemini-2.5-pro':    'llama-3.3-70b-versatile',
+  'gemini-2.5-flash':  'llama-3.1-70b-versatile',
+  'mistral-nemo':      'mistral-saba-24b',
+  'deepseek-v3':       'llama-3.3-70b-versatile',
+  'phi-4':             'llama-3.1-8b-instant',
+  'phi-4-mini':        'llama-3.1-8b-instant',
+  'command-r-plus':    'llama-3.3-70b-versatile',
+  'command-r':         'llama-3.1-70b-versatile',
+  'hermes-3-405b':     'llama-3.3-70b-versatile',
+  'sonar-online':      'llama-3.3-70b-versatile',
+  'sonar-pro':         'llama-3.3-70b-versatile',
 };
 
 // Smart AI router: Groq → OpenRouter → Pollinations
