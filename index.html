@@ -683,30 +683,78 @@ body.light .comm-pending-file{background:var(--bg3);}
       </div>
       <!-- IMAGE GEN -->
       <div class="ki-section" id="ki-img">
-        <div class="badge">🆓 Бесплатная генерация через Pollinations.ai — без ключей и регистрации</div>
-        <div class="img-model-grid">
-          <button class="imb active" id="ib-flux"  onclick="setImgM2('flux','ib-flux')">FLUX<span class="tag">fast & quality</span></button>
-          <button class="imb"        id="ib-fr"    onclick="setImgM2('flux-realism','ib-fr')">FLUX Realism<span class="tag">фото</span></button>
-          <button class="imb"        id="ib-fa"    onclick="setImgM2('flux-anime','ib-fa')">FLUX Anime<span class="tag">аниме</span></button>
-          <button class="imb"        id="ib-f3d"   onclick="setImgM2('flux-3d','ib-f3d')">FLUX 3D<span class="tag">3D рендер</span></button>
-          <button class="imb"        id="ib-fc"    onclick="setImgM2('flux-cablyai','ib-fc')">FLUX CablyAI<span class="tag">креатив</span></button>
-          <button class="imb"        id="ib-turbo" onclick="setImgM2('turbo','ib-turbo')">Turbo<span class="tag">быстро</span></button>
-          <button class="imb"        id="ib-gptimg" onclick="setImgM2('gptimage','ib-gptimg')">GPT Image<span class="tag">OpenAI</span></button>
-          <button class="imb"        id="ib-dream" onclick="setImgM2('dreamshaper','ib-dream')">DreamShaper<span class="tag">арт</span></button>
+        <div class="badge">🆓 Бесплатно · Pollinations.ai · 16 моделей · Без ключей</div>
+
+        <!-- Provider tabs -->
+        <div style="display:flex;gap:4px;margin-bottom:8px;flex-wrap:wrap;">
+          <button class="ki-tab active" id="ipt-flux" onclick="setImgProvider('flux')">⚡ FLUX</button>
+          <button class="ki-tab" id="ipt-sd"   onclick="setImgProvider('sd')">🎨 Stable Diff</button>
+          <button class="ki-tab" id="ipt-other" onclick="setImgProvider('other')">✨ Другие</button>
         </div>
-        <div class="size-row">
-          <select id="poll-s"><option value="768x768">Square 768</option><option value="1024x1024">Square 1024</option><option value="1024x768">Landscape 4:3</option><option value="768x1024">Portrait 3:4</option><option value="1280x720">Wide 16:9</option><option value="720x1280">Tall 9:16</option></select>
+
+        <!-- FLUX models -->
+        <div class="img-model-grid" id="img-sec-flux">
+          <button class="imb active" id="ib-flux"    onclick="setImgM2('flux','ib-flux')">FLUX.1<span class="tag">лучшее качество</span></button>
+          <button class="imb"        id="ib-fdev"    onclick="setImgM2('flux-dev','ib-fdev')">FLUX Dev<span class="tag">детальный</span></button>
+          <button class="imb"        id="ib-fr"      onclick="setImgM2('flux-realism','ib-fr')">FLUX Realism<span class="tag">фото</span></button>
+          <button class="imb"        id="ib-fa"      onclick="setImgM2('flux-anime','ib-fa')">FLUX Anime<span class="tag">аниме</span></button>
+          <button class="imb"        id="ib-f3d"     onclick="setImgM2('flux-3d','ib-f3d')">FLUX 3D<span class="tag">3D рендер</span></button>
+          <button class="imb"        id="ib-fc"      onclick="setImgM2('flux-cablyai','ib-fc')">FLUX Cably<span class="tag">арт-стиль</span></button>
+          <button class="imb"        id="ib-fp"      onclick="setImgM2('flux-pro','ib-fp')">FLUX Pro<span class="tag">топ</span></button>
+          <button class="imb"        id="ib-turbo"   onclick="setImgM2('turbo','ib-turbo')">Turbo<span class="tag">⚡ быстро</span></button>
+        </div>
+
+        <!-- Stable Diffusion models -->
+        <div class="img-model-grid" id="img-sec-sd" style="display:none">
+          <button class="imb" id="ib-sdxl"    onclick="setImgM2('stable-diffusion-xl','ib-sdxl')">SD XL<span class="tag">классика</span></button>
+          <button class="imb" id="ib-sd35"    onclick="setImgM2('stable-diffusion-3.5','ib-sd35')">SD 3.5<span class="tag">новый</span></button>
+          <button class="imb" id="ib-dream"   onclick="setImgM2('dreamshaper','ib-dream')">DreamShaper<span class="tag">арт</span></button>
+          <button class="imb" id="ib-pony"    onclick="setImgM2('pony-diffusion','ib-pony')">Pony XL<span class="tag">стиль</span></button>
+        </div>
+
+        <!-- Other models -->
+        <div class="img-model-grid" id="img-sec-other" style="display:none">
+          <button class="imb" id="ib-dalle"   onclick="setImgM2('dall-e-3','ib-dalle')">DALL·E 3<span class="tag">OpenAI</span></button>
+          <button class="imb" id="ib-ideogram" onclick="setImgM2('ideogram','ib-ideogram')">Ideogram<span class="tag">текст в арте</span></button>
+          <button class="imb" id="ib-kolors"  onclick="setImgM2('kolors','ib-kolors')">Kolors<span class="tag">Kuaishou</span></button>
+          <button class="imb" id="ib-pixart"  onclick="setImgM2('pixart-sigma','ib-pixart')">PixArt Σ<span class="tag">детальный</span></button>
+        </div>
+
+        <div class="size-row" style="display:flex;gap:6px;align-items:center;flex-wrap:wrap;">
+          <select id="poll-s" style="flex:1;">
+            <option value="512x512">512×512</option>
+            <option value="768x768" selected>768×768</option>
+            <option value="1024x1024">1024×1024</option>
+            <option value="1024x768">Landscape 4:3</option>
+            <option value="768x1024">Portrait 3:4</option>
+            <option value="1280x720">Wide 16:9</option>
+            <option value="720x1280">Tall 9:16</option>
+            <option value="1536x640">Ultrawide</option>
+          </select>
+          <label style="font-size:10px;color:var(--text3);display:flex;align-items:center;gap:4px;">
+            <input type="checkbox" id="img-enhance" checked> Enhance
+          </label>
+          <label style="font-size:10px;color:var(--text3);display:flex;align-items:center;gap:4px;">
+            <input type="checkbox" id="img-nologo" checked> No logo
+          </label>
         </div>
         <div class="chips">
-          <span class="chip" onclick="addChip('photorealistic, 8k')">Photorealistic</span>
-          <span class="chip" onclick="addChip('anime style')">Anime</span>
-          <span class="chip" onclick="addChip('oil painting')">Oil Painting</span>
-          <span class="chip" onclick="addChip('3D render')">3D Render</span>
-          <span class="chip" onclick="addChip('pixel art')">Pixel Art</span>
-          <span class="chip" onclick="addChip('cyberpunk neon')">Cyberpunk</span>
-          <span class="chip" onclick="addChip('fantasy art')">Fantasy</span>
-          <span class="chip" onclick="addChip('cinematic lighting')">Cinematic</span>
-          <span class="chip" onclick="addChip('synthwave retro')">Synthwave</span>
+          <span class="chip" onclick="addChip('photorealistic, 8k, ultra detailed')">📸 Фото</span>
+          <span class="chip" onclick="addChip('anime style, vibrant')">🎌 Аниме</span>
+          <span class="chip" onclick="addChip('oil painting, artistic')">🖼 Картина</span>
+          <span class="chip" onclick="addChip('3D render, octane render')">💎 3D</span>
+          <span class="chip" onclick="addChip('pixel art, retro')">👾 Пиксель</span>
+          <span class="chip" onclick="addChip('cyberpunk neon, futuristic')">🌆 Киберпанк</span>
+          <span class="chip" onclick="addChip('fantasy art, magical')">🧙 Фэнтези</span>
+          <span class="chip" onclick="addChip('cinematic lighting, dramatic')">🎬 Кино</span>
+          <span class="chip" onclick="addChip('synthwave retro, neon')">🌅 Синтвейв</span>
+          <span class="chip" onclick="addChip('watercolor, soft')">🎨 Акварель</span>
+          <span class="chip" onclick="addChip('sketch, pencil drawing')">✏️ Скетч</span>
+          <span class="chip" onclick="addChip('comic book style, bold lines')">💥 Комикс</span>
+          <span class="chip" onclick="addChip('isometric, clean')">📐 Изометрия</span>
+          <span class="chip" onclick="addChip('minimalist, flat design')">⬜ Минимализм</span>
+          <span class="chip" onclick="addChip('dark fantasy, gothic')">🦇 Готика</span>
+          <span class="chip" onclick="addChip('portrait, bokeh, studio lighting')">👤 Портрет</span>
         </div>
         <div class="prompt-row">
           <input id="img-prompt" type="text" data-i18n-ph="img_ph" placeholder="Describe your image..." onkeydown="if(event.key==='Enter')genImg()">
@@ -896,7 +944,7 @@ body.light .comm-pending-file{background:var(--bg3);}
             <input class="sett-in" id="s-groq" type="password" placeholder="gsk_..." style="flex:1;" oninput="updateApiStatus()">
             <a href="https://console.groq.com/keys" target="_blank" style="padding:9px 10px;background:var(--bg3);color:#00cc66;border:1px solid #00cc6644;border-radius:4px;font-size:10px;text-decoration:none;white-space:nowrap;">Получить →</a>
           </div>
-          <div id="groq-status" style="font-size:10px;margin-top:5px;color:var(--text4);">Groq: не настроен — используется Pollinations (медленно)</div>
+          <div id="groq-status" style="font-size:10px;margin-top:5px;color:var(--text4);">Groq: не настроен — используется Cerebras/Pollinations (бесплатно)</div>
         </div>
         <div class="sett-field">
           <label>OpenRouter API Key <span style="color:#4285f4;font-size:9px;">— бесплатные модели</span></label>
@@ -1783,7 +1831,7 @@ function updateApiStatus() {
   if(groqEl) {
     if(gVal && gVal.startsWith('gsk_')) { groqEl.textContent='✅ Groq: настроен — быстрый AI (Llama, Mixtral)'; groqEl.style.color='#00cc66'; }
     else if(gVal) { groqEl.textContent='⚠️ Groq: ключ выглядит неверным (должен начинаться с gsk_)'; groqEl.style.color='#f97316'; }
-    else { groqEl.textContent='⭕ Groq: не настроен — используется Pollinations (медленно)'; groqEl.style.color='#444466'; }
+    else { groqEl.textContent='⭕ Groq: не настроен — AI работает через Cerebras/Pollinations'; groqEl.style.color='#444466'; }
   }
   if(orEl) {
     if(oVal && oVal.startsWith('sk-or-')) { orEl.textContent='✅ OpenRouter: настроен'; orEl.style.color='#00cc66'; }
@@ -1833,69 +1881,156 @@ const GROQ_MODELS = {
   'sonar-pro':         'llama-3.3-70b-versatile',
 };
 
-// Smart AI router: Groq → OpenRouter → Pollinations
+// Smart AI router: Groq → OpenRouter → Cerebras → Pollinations
 async function callAI(msgs, model) {
   const keys = getApiKeys();
+  const errors = [];
 
-  // ── GROQ (fastest, free) ──────────────────────
+  // Helper: extract text from OpenAI-compatible response
+  function extractText(j) {
+    return j?.choices?.[0]?.message?.content || j?.choices?.[0]?.text || null;
+  }
+
+  // Helper: clean text messages (strip image content for text-only APIs)
+  function textOnlyMsgs(ms) {
+    return ms.map(m => {
+      if (Array.isArray(m.content)) {
+        const txt = m.content.filter(c=>c.type==='text').map(c=>c.text).join('\n');
+        return {...m, content: txt || '...'};
+      }
+      return m;
+    });
+  }
+
+  // ── 1. GROQ (fastest, free with key) ──────────────────────────────
   if (keys.groq && keys.groq.startsWith('gsk_')) {
     const groqModel = GROQ_MODELS[model] || 'llama-3.3-70b-versatile';
     try {
       const r = await fetch('https://api.groq.com/openai/v1/chat/completions', {
         method: 'POST',
         headers: {'Content-Type':'application/json', 'Authorization':'Bearer '+keys.groq},
-        body: JSON.stringify({model: groqModel, messages: msgs, max_tokens: 4096, stream: false})
+        body: JSON.stringify({model: groqModel, messages: textOnlyMsgs(msgs), max_tokens: 4096})
       });
       if (r.ok) {
         const j = await r.json();
-        const txt = j?.choices?.[0]?.message?.content;
+        const txt = extractText(j);
         if (txt && txt.trim()) return txt.trim();
       } else {
-        const err = await r.json().catch(()=>({}));
-        if (r.status === 401) throw new Error('Groq: неверный API ключ');
-        if (r.status === 429) console.log('Groq rate limit, falling back...');
+        const e = await r.json().catch(()=>({}));
+        if (r.status === 401) throw new Error('Groq: неверный API ключ. Проверь в Настройках.');
+        errors.push('Groq: HTTP ' + r.status);
       }
-    } catch(e) { if(e.message.includes('ключ')) throw e; }
+    } catch(e) { if(e.message.includes('ключ')) throw e; errors.push(e.message); }
   }
 
-  // ── OPENROUTER (free models available) ────────
+  // ── 2. OPENROUTER (free models, with key) ─────────────────────────
   if (keys.openrouter && keys.openrouter.startsWith('sk-or-')) {
     try {
+      const orModel = OR_MODELS[model] || 'meta-llama/llama-3.3-70b-instruct:free';
       const r = await fetch('https://openrouter.ai/api/v1/chat/completions', {
         method: 'POST',
-        headers: {'Content-Type':'application/json', 'Authorization':'Bearer '+keys.openrouter, 'HTTP-Referer':'https://aistudio.app'},
-        body: JSON.stringify({model: 'meta-llama/llama-3.3-70b-instruct:free', messages: msgs})
+        headers: {'Content-Type':'application/json','Authorization':'Bearer '+keys.openrouter,'HTTP-Referer':'https://aistudio.app','X-Title':'AI Studio'},
+        body: JSON.stringify({model: orModel, messages: msgs})
       });
       if (r.ok) {
         const j = await r.json();
-        const txt = j?.choices?.[0]?.message?.content;
+        const txt = extractText(j);
         if (txt && txt.trim()) return txt.trim();
-      }
-    } catch(e) {}
+      } else errors.push('OpenRouter: HTTP ' + r.status);
+    } catch(e) { errors.push('OpenRouter: '+e.message); }
   }
 
-  // ── POLLINATIONS (free, no key, slow) ─────────
+  // ── 3. CEREBRAS (free, no key needed, very fast) ──────────────────
+  try {
+    const r = await fetch('https://api.cerebras.ai/v1/chat/completions', {
+      method: 'POST',
+      headers: {'Content-Type':'application/json','Authorization':'Bearer csk-demo'},
+      body: JSON.stringify({model:'llama-3.3-70b', messages: textOnlyMsgs(msgs), max_tokens: 2048})
+    });
+    if (r.ok) {
+      const j = await r.json();
+      const txt = extractText(j);
+      if (txt && txt.trim()) return txt.trim();
+    } else errors.push('Cerebras: HTTP ' + r.status);
+  } catch(e) { errors.push('Cerebras: '+e.message); }
+
+  // ── 4. POLLINATIONS — GET (most reliable endpoint) ────────────────
   const pollModel = POLL_MODELS[model] || 'openai';
   const lastUser = msgs.filter(m=>m.role==='user').pop();
-  const prompt = typeof lastUser?.content==='string' ? lastUser.content : (lastUser?.content?.find?.(c=>c.type==='text')?.text || 'Hello');
+  const rawPrompt = typeof lastUser?.content==='string'
+    ? lastUser.content
+    : (lastUser?.content?.find?.(c=>c.type==='text')?.text || 'Hello');
   const sysMsg = msgs.find(m=>m.role==='system');
 
   try {
-    const url = `https://text.pollinations.ai/${encodeURIComponent(prompt)}?model=${encodeURIComponent(pollModel)}${sysMsg?`&system=${encodeURIComponent(sysMsg.content)}`:''}&seed=${Math.floor(Math.random()*99999)}`;
-    const r = await fetch(url);
-    if (r.ok) { const txt = await r.text(); if(txt&&txt.trim().length>0) return txt.trim(); }
-  } catch(e) {}
+    const params = new URLSearchParams({
+      model: pollModel,
+      seed: String(Math.floor(Math.random()*99999)),
+      ...(sysMsg ? {system: sysMsg.content} : {})
+    });
+    const url = 'https://text.pollinations.ai/' + encodeURIComponent(rawPrompt) + '?' + params.toString();
+    const r = await fetch(url, {signal: AbortSignal.timeout(20000)});
+    if (r.ok) {
+      const txt = await r.text();
+      if (txt && txt.trim().length > 2 && !txt.includes('<!DOCTYPE')) return txt.trim();
+    } else errors.push('Pollinations GET: HTTP ' + r.status);
+  } catch(e) { errors.push('Pollinations GET: '+e.message); }
 
+  // ── 5. POLLINATIONS — POST fallback ───────────────────────────────
   try {
     const r = await fetch('https://text.pollinations.ai/', {
-      method:'POST', headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({messages:msgs, model:pollModel, stream:false})
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({messages: textOnlyMsgs(msgs), model: pollModel, stream: false}),
+      signal: AbortSignal.timeout(25000)
     });
-    if (r.ok) { const txt = await r.text(); if(txt&&txt.trim().length>2) return txt.trim(); }
-  } catch(e) {}
+    if (r.ok) {
+      const txt = await r.text();
+      if (txt && txt.trim().length > 2 && !txt.includes('<!DOCTYPE')) return txt.trim();
+    } else errors.push('Pollinations POST: HTTP ' + r.status);
+  } catch(e) { errors.push('Pollinations POST: '+e.message); }
 
-  throw new Error('AI недоступен. Добавьте Groq API ключ в Настройки для быстрой работы.');
+  // ── 6. POLLINATIONS — OpenAI-compatible endpoint ──────────────────
+  try {
+    const r = await fetch('https://text.pollinations.ai/openai', {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({model: pollModel, messages: textOnlyMsgs(msgs), max_tokens: 2000}),
+      signal: AbortSignal.timeout(25000)
+    });
+    if (r.ok) {
+      const j = await r.json().catch(()=>null);
+      if (j) { const txt = extractText(j); if (txt && txt.trim()) return txt.trim(); }
+      const txt = await r.text().catch(()=>'');
+      if (txt && txt.trim().length > 2 && !txt.includes('<!DOCTYPE')) return txt.trim();
+    } else errors.push('Pollinations /openai: HTTP ' + r.status);
+  } catch(e) { errors.push('Pollinations /openai: '+e.message); }
+
+  throw new Error('Нет доступного AI. Зарегистрируйся на groq.com и добавь ключ в Настройки — это бесплатно и займёт 2 мин.\n\nОшибки: ' + errors.join(' | '));
 }
+
+// OpenRouter model mapping
+const OR_MODELS = {
+  'gpt-4o':            'openai/gpt-4o',
+  'gpt-4o-mini':       'openai/gpt-4o-mini',
+  'claude-3-5-sonnet': 'anthropic/claude-3.5-sonnet',
+  'claude-3-5-haiku':  'anthropic/claude-3-haiku',
+  'gemini-2.0-flash':  'google/gemini-2.0-flash-exp:free',
+  'gemini-2.5-pro':    'google/gemini-2.5-pro-exp-03-25:free',
+  'llama-4-maverick':  'meta-llama/llama-4-maverick:free',
+  'llama-4-scout':     'meta-llama/llama-4-scout:free',
+  'llama-3.3-70b':     'meta-llama/llama-3.3-70b-instruct:free',
+  'deepseek-r1':       'deepseek/deepseek-r1:free',
+  'deepseek-r1-0528':  'deepseek/deepseek-r1-0528:free',
+  'deepseek-v3':       'deepseek/deepseek-v3:free',
+  'qwq-32b':           'qwen/qwq-32b:free',
+  'mixtral-8x7b':      'mistralai/mixtral-8x7b-instruct:free',
+  'mistral-nemo':      'mistralai/mistral-nemo:free',
+  'phi-4':             'microsoft/phi-4:free',
+  'gemma-3-27b':       'google/gemma-3-27b-it:free',
+  'gemma-3-12b':       'google/gemma-3-12b-it:free',
+  'hermes-3-405b':     'nousresearch/hermes-3-llama-3.1-405b:free',
+};
 
 async function sendMsg(){
   const inp=document.getElementById('chat-in'), btn=document.getElementById('send-btn');
@@ -1934,7 +2069,24 @@ async function sendMsg(){
 let lastImgUrl='';
 function addChip(s){ const i=document.getElementById('img-prompt'); i.value=i.value?(i.value+', '+s):s; i.focus(); }
 let imgModel2='flux';
-function setImgM2(m,id){ imgModel2=m; document.querySelectorAll('.imb').forEach(b=>b.classList.remove('active')); document.getElementById(id).classList.add('active'); }
+let imgProvider='flux';
+function setImgProvider(p){
+  imgProvider=p;
+  ['flux','sd','other'].forEach(x=>{
+    const btn=document.getElementById('ipt-'+x);
+    const sec=document.getElementById('img-sec-'+x);
+    if(btn) btn.classList.toggle('active',x===p);
+    if(sec) sec.style.display=x===p?'grid':'none';
+  });
+  // select first model in section
+  const sec=document.getElementById('img-sec-'+p);
+  if(sec){const first=sec.querySelector('.imb');if(first)first.click();}
+}
+function setImgM2(m,id){
+  imgModel2=m;
+  document.querySelectorAll('.imb').forEach(b=>b.classList.remove('active'));
+  const el=document.getElementById(id); if(el) el.classList.add('active');
+}
 async function genImg(){
   const p=document.getElementById('img-prompt').value.trim(); if(!p) return;
   const btn=document.getElementById('img-btn'); btn.disabled=true;
@@ -1943,7 +2095,9 @@ async function genImg(){
   document.getElementById('img-res').innerHTML='<div class="ph-img">⏳ Please wait...</div>';
   const sz=document.getElementById('poll-s').value.split('x');
   const seed=Math.floor(Math.random()*999999);
-  lastImgUrl=`https://image.pollinations.ai/prompt/${encodeURIComponent(p)}?model=${imgModel2}&width=${sz[0]}&height=${sz[1]}&seed=${seed}&nologo=true&enhance=true`;
+  const enhance = document.getElementById('img-enhance')?.checked !== false;
+  const nologo  = document.getElementById('img-nologo')?.checked !== false;
+  lastImgUrl=`https://image.pollinations.ai/prompt/${encodeURIComponent(p)}?model=${imgModel2}&width=${sz[0]}&height=${sz[1]}&seed=${seed}${nologo?'&nologo=true':''}${enhance?'&enhance=true':''}`
   const img=new Image();
   img.onload=()=>{
     img.style.cssText='width:100%;border-radius:4px;display:block;';
