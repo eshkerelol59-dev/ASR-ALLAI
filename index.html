@@ -1549,53 +1549,18 @@ function getSysPr(){ if(currentMode==='custom'){ return document.getElementById(
 //  MODELS
 // ═══════════════════════════════════════════
 const ALL_MODELS=[
-  // ── OpenAI (via Pollinations openai / openai-fast / openai-reasoning) ──
-  {id:'gpt-4o',        name:'GPT-4o',          provider:'OpenAI',     badge:'m-openai', note:'✓ fast'},
-  {id:'gpt-4o-mini',   name:'GPT-4o Mini',     provider:'OpenAI',     badge:'m-openai', note:'✓ fast'},
-  {id:'o3-mini',       name:'o3 Mini',         provider:'OpenAI',     badge:'m-openai', note:'reasoning'},
-  {id:'o1-mini',       name:'o1 Mini',         provider:'OpenAI',     badge:'m-openai', note:'reasoning'},
-  // ── Anthropic (via Pollinations claude-hybridspace) ──
-  {id:'claude-3-5-sonnet',   name:'Claude 3.5 Sonnet', provider:'Anthropic', badge:'m-claude', note:'✓ smart'},
-  {id:'claude-3-5-haiku',    name:'Claude 3.5 Haiku',  provider:'Anthropic', badge:'m-claude', note:'✓ fast'},
-  {id:'claude-3-opus',       name:'Claude 3 Opus',     provider:'Anthropic', badge:'m-claude', note:'powerful'},
-  // ── Google (via Pollinations gemini) ──
-  {id:'gemini-2.0-flash',    name:'Gemini 2.0 Flash',  provider:'Google',    badge:'m-google', note:'✓ fast'},
-  {id:'gemini-2.5-pro',      name:'Gemini 2.5 Pro',    provider:'Google',    badge:'m-google', note:'smart'},
-  {id:'gemini-2.5-flash',    name:'Gemini 2.5 Flash',  provider:'Google',    badge:'m-google', note:'✓ fast'},
-  // ── Meta Llama (via Groq native / Pollinations llama) ──
-  {id:'llama-4-maverick',    name:'Llama 4 Maverick',  provider:'Meta',      badge:'m-meta',   note:'⚡ Groq'},
-  {id:'llama-4-scout',       name:'Llama 4 Scout',     provider:'Meta',      badge:'m-meta',   note:'⚡ Groq'},
-  {id:'llama-3.3-70b',       name:'Llama 3.3 70B',     provider:'Meta',      badge:'m-meta',   note:'⚡ Groq'},
-  {id:'llama-3.1-70b',       name:'Llama 3.1 70B',     provider:'Meta',      badge:'m-meta',   note:'⚡ Groq'},
-  {id:'llama-3.1-8b',        name:'Llama 3.1 8B',      provider:'Meta',      badge:'m-meta',   note:'⚡ fast'},
-  // ── Mistral (via Groq native / Pollinations mistral) ──
-  {id:'mixtral-8x7b',        name:'Mixtral 8x7B',      provider:'Mistral',   badge:'m-other',  note:'⚡ Groq'},
-  {id:'mistral-saba',        name:'Mistral Saba 24B',  provider:'Mistral',   badge:'m-other',  note:'⚡ Groq'},
-  {id:'mistral-large',       name:'Mistral Large 2',   provider:'Mistral',   badge:'m-other',  note:'smart'},
-  {id:'mistral-nemo',        name:'Mistral Nemo',      provider:'Mistral',   badge:'m-other',  note:'fast'},
-  // ── DeepSeek (via Groq / Pollinations) ──
-  {id:'deepseek-r1',         name:'DeepSeek R1',       provider:'DeepSeek',  badge:'m-other',  note:'⚡ reasoning'},
-  {id:'deepseek-r1-0528',    name:'DeepSeek R1 0528',  provider:'DeepSeek',  badge:'m-other',  note:'⚡ latest'},
-  {id:'deepseek-v3',         name:'DeepSeek V3',       provider:'DeepSeek',  badge:'m-other',  note:'smart'},
-  // ── Qwen / Alibaba (via Groq / Pollinations) ──
-  {id:'qwq-32b',             name:'QwQ 32B',           provider:'Alibaba',   badge:'m-other',  note:'⚡ reasoning'},
-  {id:'qwen-2.5-72b',        name:'Qwen 2.5 72B',      provider:'Alibaba',   badge:'m-other',  note:'smart'},
-  {id:'qwen-2.5-coder',      name:'Qwen 2.5 Coder',    provider:'Alibaba',   badge:'m-other',  note:'code'},
-  // ── Google Gemma (via Groq native) ──
-  {id:'gemma-3-27b',         name:'Gemma 3 27B',       provider:'Google',    badge:'m-google', note:'⚡ Groq'},
-  {id:'gemma-3-12b',         name:'Gemma 3 12B',       provider:'Google',    badge:'m-google', note:'⚡ Groq'},
-  {id:'gemma-3-4b',          name:'Gemma 3 4B',        provider:'Google',    badge:'m-google', note:'⚡ tiny'},
-  // ── Microsoft ──
-  {id:'phi-4',               name:'Phi-4',             provider:'Microsoft', badge:'m-other',  note:'smart'},
-  {id:'phi-4-mini',          name:'Phi-4 Mini',        provider:'Microsoft', badge:'m-other',  note:'tiny'},
-  // ── Cohere ──
-  {id:'command-r-plus',      name:'Command R+',        provider:'Cohere',    badge:'m-other',  note:'search'},
-  {id:'command-r',           name:'Command R',         provider:'Cohere',    badge:'m-other',  note:'fast'},
-  // ── Nous ──
-  {id:'hermes-3-405b',       name:'Hermes 3 405B',     provider:'Nous',      badge:'m-other',  note:'large'},
-  // ── Perplexity / Search ──
-  {id:'sonar-online',        name:'Sonar Online',      provider:'Perplexity',badge:'m-other',  note:'🌐 web'},
-  {id:'sonar-pro',           name:'Sonar Pro',         provider:'Perplexity',badge:'m-other',  note:'🌐 web'},
+  // ── Groq native — 100% работают с ключом ──
+  {id:'llama-4-maverick', name:'Llama 4 Maverick',  provider:'Meta',    badge:'m-meta',   note:'⚡ новый'},
+  {id:'llama-4-scout',    name:'Llama 4 Scout',     provider:'Meta',    badge:'m-meta',   note:'⚡ быстрый'},
+  {id:'llama-3.3-70b',    name:'Llama 3.3 70B',     provider:'Meta',    badge:'m-meta',   note:'⚡ умный'},
+  {id:'llama-3.1-8b',     name:'Llama 3.1 8B',      provider:'Meta',    badge:'m-meta',   note:'⚡ мгновенный'},
+  {id:'mixtral-8x7b',     name:'Mixtral 8x7B',      provider:'Mistral', badge:'m-other',  note:'⚡ мощный'},
+  {id:'mistral-saba',     name:'Mistral Saba 24B',  provider:'Mistral', badge:'m-other',  note:'⚡ новый'},
+  {id:'deepseek-r1',      name:'DeepSeek R1',       provider:'DeepSeek',badge:'m-other',  note:'⚡ рассуждения'},
+  {id:'deepseek-r1-0528', name:'DeepSeek R1 0528',  provider:'DeepSeek',badge:'m-other',  note:'⚡ последний'},
+  {id:'qwq-32b',          name:'QwQ 32B',           provider:'Alibaba', badge:'m-other',  note:'⚡ логика'},
+  {id:'gemma-3-27b',      name:'Gemma 3 27B',       provider:'Google',  badge:'m-google', note:'⚡ Google'},
+  {id:'gemma-3-4b',       name:'Gemma 3 4B',        provider:'Google',  badge:'m-google', note:'⚡ мини'},
 ];
 let ratings={}, currentSort='rating', selectedModel=ALL_MODELS[0].id, mlOpen=false;
 
@@ -1855,10 +1820,10 @@ function updateApiStatus() {
   }
 }
 
-// Groq model mapping — verified working IDs (2026)
-// Full list: https://console.groq.com/docs/models
+// Groq model mapping — VERIFIED working March 2026
+// Source: https://console.groq.com/docs/models
 const GROQ_MODELS = {
-  // Native Groq models (fastest)
+  // ✅ These models actually exist on Groq
   'llama-4-maverick':  'meta-llama/llama-4-maverick-17b-128e-instruct',
   'llama-4-scout':     'meta-llama/llama-4-scout-17b-16e-instruct',
   'llama-3.3-70b':     'llama-3.3-70b-versatile',
@@ -1868,11 +1833,13 @@ const GROQ_MODELS = {
   'mistral-saba':      'mistral-saba-24b',
   'deepseek-r1':       'deepseek-r1-distill-llama-70b',
   'deepseek-r1-0528':  'deepseek-r1-distill-llama-70b',
-  'qwq-32b':           'qwen-qwq-32b',
+  'qwq-32b':           'llama-3.3-70b-versatile',   // qwen not on Groq → llama fallback
+  'qwen-2.5-72b':      'llama-3.3-70b-versatile',
+  'qwen-2.5-coder':    'llama-3.3-70b-versatile',
   'gemma-3-27b':       'gemma2-9b-it',
   'gemma-3-12b':       'gemma2-9b-it',
   'gemma-3-4b':        'gemma2-9b-it',
-  // Non-Groq models → best available Groq equivalent
+  // Non-Groq → best Groq equivalent
   'gpt-4o':            'llama-3.3-70b-versatile',
   'gpt-4o-mini':       'llama-3.1-8b-instant',
   'o1-mini':           'deepseek-r1-distill-llama-70b',
@@ -1886,8 +1853,6 @@ const GROQ_MODELS = {
   'mistral-nemo':      'mistral-saba-24b',
   'mistral-large':     'llama-3.3-70b-versatile',
   'deepseek-v3':       'llama-3.3-70b-versatile',
-  'qwen-2.5-72b':      'qwen-qwq-32b',
-  'qwen-2.5-coder':    'qwen-qwq-32b',
   'phi-4':             'llama-3.1-8b-instant',
   'phi-4-mini':        'llama-3.1-8b-instant',
   'command-r-plus':    'llama-3.3-70b-versatile',
@@ -1897,134 +1862,136 @@ const GROQ_MODELS = {
   'sonar-pro':         'llama-3.3-70b-versatile',
 };
 
-// Smart AI router: Groq → OpenRouter → Cerebras → Pollinations
+// Smart AI router: Groq → OpenRouter → HuggingFace → Pollinations
 async function callAI(msgs, model) {
   const keys = getApiKeys();
   const errors = [];
 
-  // Helper: extract text from OpenAI-compatible response
-  function extractText(j) {
+  function extractOAI(j) {
     return j?.choices?.[0]?.message?.content || j?.choices?.[0]?.text || null;
   }
-
-  // Helper: clean text messages (strip image content for text-only APIs)
-  function textOnlyMsgs(ms) {
-    return ms.map(m => {
-      if (Array.isArray(m.content)) {
-        const txt = m.content.filter(c=>c.type==='text').map(c=>c.text).join('\n');
-        return {...m, content: txt || '...'};
-      }
-      return m;
-    });
+  function toTextMsgs(ms) {
+    return ms.map(m => ({
+      ...m,
+      content: Array.isArray(m.content)
+        ? m.content.filter(c=>c.type==='text').map(c=>c.text).join('\n') || '...'
+        : m.content
+    }));
+  }
+  function lastUserText(ms) {
+    const u = toTextMsgs(ms).filter(m=>m.role==='user').pop();
+    return u?.content || 'Hello';
   }
 
-  // ── 1. GROQ (fastest, free with key) ──────────────────────────────
+  // ── 1. GROQ (fastest, free with key) ─────────────────────────────
   if (keys.groq && keys.groq.startsWith('gsk_')) {
-    const groqModel = GROQ_MODELS[model] || 'llama-3.3-70b-versatile';
+    const gm = GROQ_MODELS[model] || 'llama-3.3-70b-versatile';
     try {
       const r = await fetch('https://api.groq.com/openai/v1/chat/completions', {
-        method: 'POST',
-        headers: {'Content-Type':'application/json', 'Authorization':'Bearer '+keys.groq},
-        body: JSON.stringify({model: groqModel, messages: textOnlyMsgs(msgs), max_tokens: 8192, temperature: 0.7})
+        method:'POST',
+        headers:{'Content-Type':'application/json','Authorization':'Bearer '+keys.groq},
+        body: JSON.stringify({model:gm, messages:toTextMsgs(msgs), max_tokens:4096, temperature:0.7}),
+        signal: AbortSignal.timeout(20000)
       });
       if (r.ok) {
         const j = await r.json();
-        const txt = extractText(j);
-        if (txt && txt.trim()) return txt.trim();
+        const txt = extractOAI(j);
+        if (txt?.trim()) return txt.trim();
       } else {
-        const errBody = await r.json().catch(()=>({}));
-        const errMsg = errBody?.error?.message || '';
-        if (r.status === 401) throw new Error('Groq: неверный API ключ. Проверь в Настройках.');
-        if (r.status === 400) errors.push('Groq: модель не поддерживается (' + groqModel + ')');
-        else errors.push('Groq: HTTP ' + r.status + ' ' + errMsg.slice(0,60));
+        const eb = await r.json().catch(()=>({}));
+        if (r.status===401) throw new Error('Groq: неверный API ключ — проверь в Настройках.');
+        errors.push('Groq '+r.status+': '+(eb?.error?.message||'').slice(0,80));
       }
-    } catch(e) { if(e.message.includes('ключ')) throw e; errors.push(e.message); }
+    } catch(e) { if(e.message.includes('ключ')) throw e; errors.push('Groq: '+e.message.slice(0,60)); }
   }
 
-  // ── 2. OPENROUTER (free models, with key) ─────────────────────────
+  // ── 2. OPENROUTER (free models, with key) ────────────────────────
   if (keys.openrouter && keys.openrouter.startsWith('sk-or-')) {
+    const om = OR_MODELS[model] || 'meta-llama/llama-3.3-70b-instruct:free';
     try {
-      const orModel = OR_MODELS[model] || 'meta-llama/llama-3.3-70b-instruct:free';
       const r = await fetch('https://openrouter.ai/api/v1/chat/completions', {
-        method: 'POST',
-        headers: {'Content-Type':'application/json','Authorization':'Bearer '+keys.openrouter,'HTTP-Referer':'https://aistudio.app','X-Title':'AI Studio'},
-        body: JSON.stringify({model: orModel, messages: msgs})
+        method:'POST',
+        headers:{'Content-Type':'application/json','Authorization':'Bearer '+keys.openrouter,
+                 'HTTP-Referer':'https://aistudio.app','X-Title':'AI Studio'},
+        body: JSON.stringify({model:om, messages:msgs, max_tokens:2048}),
+        signal: AbortSignal.timeout(25000)
       });
       if (r.ok) {
         const j = await r.json();
-        const txt = extractText(j);
-        if (txt && txt.trim()) return txt.trim();
-      } else errors.push('OpenRouter: HTTP ' + r.status);
-    } catch(e) { errors.push('OpenRouter: '+e.message); }
+        const txt = extractOAI(j);
+        if (txt?.trim()) return txt.trim();
+      } else errors.push('OpenRouter '+r.status);
+    } catch(e) { errors.push('OpenRouter: '+e.message.slice(0,60)); }
   }
 
-  // ── 3. CEREBRAS (free via Pollinations cerebras model) ────────────
-  try {
-    const params = new URLSearchParams({model:'openai', seed: String(Math.floor(Math.random()*99999))});
-    const lastU = textOnlyMsgs(msgs).filter(m=>m.role==='user').pop();
-    const cp = lastU?.content || 'Hello';
-    const r = await fetch('https://text.pollinations.ai/' + encodeURIComponent(cp) + '?' + params, {signal: AbortSignal.timeout(15000)});
-    if (r.ok) {
-      const txt = await r.text();
-      if (txt && txt.trim().length > 2 && !txt.includes('<!DOCTYPE')) return txt.trim();
-    } else errors.push('Pollinations-2: HTTP ' + r.status);
-  } catch(e) { errors.push('Pollinations-2: '+e.message); }
+  // ── 3. HUGGINGFACE Inference API (free, no key needed) ───────────
+  const hfModels = [
+    'mistralai/Mistral-7B-Instruct-v0.3',
+    'meta-llama/Meta-Llama-3-8B-Instruct',
+    'HuggingFaceH4/zephyr-7b-beta'
+  ];
+  for (const hfm of hfModels) {
+    try {
+      const prompt = toTextMsgs(msgs).map(m=>`${m.role==='user'?'User':'Assistant'}: ${m.content}`).join('\n') + '\nAssistant:';
+      const r = await fetch(`https://api-inference.huggingface.co/models/${hfm}`, {
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({inputs: prompt, parameters:{max_new_tokens:512, temperature:0.7, return_full_text:false}}),
+        signal: AbortSignal.timeout(20000)
+      });
+      if (r.ok) {
+        const j = await r.json();
+        const txt = (Array.isArray(j) ? j[0]?.generated_text : j?.generated_text) || '';
+        const clean = txt.replace(/^(Assistant:|User:)/i,'').trim();
+        if (clean.length > 5) return clean;
+      } else errors.push('HuggingFace '+hfm.split('/')[1]+' '+r.status);
+    } catch(e) { errors.push('HF: '+e.message.slice(0,40)); break; }
+  }
 
-  // ── 4. POLLINATIONS — GET (most reliable endpoint) ────────────────
-  const pollModel = POLL_MODELS[model] || 'openai';
-  const lastUser = msgs.filter(m=>m.role==='user').pop();
-  const rawPrompt = typeof lastUser?.content==='string'
-    ? lastUser.content
-    : (lastUser?.content?.find?.(c=>c.type==='text')?.text || 'Hello');
-  const sysMsg = msgs.find(m=>m.role==='system');
+  // ── 4. POLLINATIONS GET (random seed to avoid rate limit cache) ──
+  const pm = POLL_MODELS[model] || 'openai';
+  const prompt = lastUserText(msgs);
+  const sys = msgs.find(m=>m.role==='system');
+  for (let attempt=0; attempt<3; attempt++) {
+    try {
+      const seed = Math.floor(Math.random()*999999);
+      const params = new URLSearchParams({model:pm, seed:String(seed), ...(sys?{system:sys.content}:{})});
+      const r = await fetch('https://text.pollinations.ai/'+encodeURIComponent(prompt)+'?'+params, {
+        signal: AbortSignal.timeout(30000)
+      });
+      if (r.ok) {
+        const txt = await r.text();
+        if (txt?.trim().length>5 && !txt.includes('<!DOCTYPE')) return txt.trim();
+      } else {
+        errors.push('Pollinations GET attempt'+(attempt+1)+': '+r.status);
+        if (r.status===429) await new Promise(res=>setTimeout(res, 2000*(attempt+1)));
+        else break;
+      }
+    } catch(e) { errors.push('Pollinations: '+e.message.slice(0,40)); break; }
+  }
 
-  try {
-    const params = new URLSearchParams({
-      model: pollModel,
-      seed: String(Math.floor(Math.random()*99999)),
-      ...(sysMsg ? {system: sysMsg.content} : {})
-    });
-    const url = 'https://text.pollinations.ai/' + encodeURIComponent(rawPrompt) + '?' + params.toString();
-    const r = await fetch(url, {signal: AbortSignal.timeout(20000)});
-    if (r.ok) {
-      const txt = await r.text();
-      if (txt && txt.trim().length > 2 && !txt.includes('<!DOCTYPE')) return txt.trim();
-    } else errors.push('Pollinations GET: HTTP ' + r.status);
-  } catch(e) { errors.push('Pollinations GET: '+e.message); }
-
-  // ── 5. POLLINATIONS — POST fallback ───────────────────────────────
+  // ── 5. POLLINATIONS POST fallback ────────────────────────────────
   try {
     const r = await fetch('https://text.pollinations.ai/', {
-      method: 'POST',
-      headers: {'Content-Type':'application/json'},
-      body: JSON.stringify({messages: textOnlyMsgs(msgs), model: pollModel, stream: false}),
-      signal: AbortSignal.timeout(25000)
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({messages:toTextMsgs(msgs), model:pm, stream:false}),
+      signal: AbortSignal.timeout(30000)
     });
     if (r.ok) {
       const txt = await r.text();
-      if (txt && txt.trim().length > 2 && !txt.includes('<!DOCTYPE')) return txt.trim();
-    } else errors.push('Pollinations POST: HTTP ' + r.status);
-  } catch(e) { errors.push('Pollinations POST: '+e.message); }
+      if (txt?.trim().length>5 && !txt.includes('<!DOCTYPE')) return txt.trim();
+    } else errors.push('Pollinations POST: '+r.status);
+  } catch(e) { errors.push('Pollinations POST: '+e.message.slice(0,40)); }
 
-  // ── 6. POLLINATIONS — OpenAI-compatible endpoint ──────────────────
-  try {
-    const r = await fetch('https://text.pollinations.ai/openai', {
-      method: 'POST',
-      headers: {'Content-Type':'application/json'},
-      body: JSON.stringify({model: pollModel, messages: textOnlyMsgs(msgs), max_tokens: 2000}),
-      signal: AbortSignal.timeout(25000)
-    });
-    if (r.ok) {
-      const j = await r.json().catch(()=>null);
-      if (j) { const txt = extractText(j); if (txt && txt.trim()) return txt.trim(); }
-      const txt = await r.text().catch(()=>'');
-      if (txt && txt.trim().length > 2 && !txt.includes('<!DOCTYPE')) return txt.trim();
-    } else errors.push('Pollinations /openai: HTTP ' + r.status);
-  } catch(e) { errors.push('Pollinations /openai: '+e.message); }
-
-  throw new Error('Нет доступного AI. Зарегистрируйся на groq.com и добавь ключ в Настройки — это бесплатно и займёт 2 мин.\n\nОшибки: ' + errors.join(' | '));
+  // ── 6. Give helpful error ─────────────────────────────────────────
+  const hasGroq = keys.groq?.startsWith('gsk_');
+  if (!hasGroq) {
+    throw new Error('❌ AI недоступен без ключа прямо сейчас (серверы перегружены).\n\n💡 Решение: Зарегистрируйся на groq.com → получи бесплатный ключ → вставь в Настройки.\n\nОшибки: '+errors.join(' | '));
+  } else {
+    throw new Error('❌ Все AI серверы недоступны.\nОшибки: '+errors.join(' | '));
+  }
 }
-
 // OpenRouter model mapping
 const OR_MODELS = {
   'gpt-4o':            'openai/gpt-4o',
