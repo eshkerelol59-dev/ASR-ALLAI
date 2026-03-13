@@ -184,14 +184,14 @@ select{background:var(--bg3);color:var(--text);border:1px solid #222244;font-fam
 .model-item{display:flex;align-items:center;gap:8px;padding:6px 10px;border-bottom:1px solid #141428;cursor:pointer;transition:background .15s;}
 .model-item:last-child{border-bottom:none;}
 .model-item:hover{background:var(--bg3);}
-.model-item.selected{background:#220a18;border-left:3px solid #e94560;}
+.model-item.selected{background:var(--chat-user);border-left:3px solid var(--accent);}
 .mi-name{flex:1;font-size:11px;color:var(--text);}
 .mi-prov{font-size:10px;color:var(--text3);min-width:65px;}
 .mi-sc{font-size:10px;min-width:40px;text-align:right;}
 .mi-sc.good{color:#00cc66;}.mi-sc.bad{color:#ff4444;}.mi-sc.neu{color:var(--text3);}
 .drop-zone{border:2px dashed #2a2a4a;border-radius:6px;padding:10px 12px;text-align:center;font-size:11px;color:var(--text4);margin-bottom:8px;transition:all .2s;cursor:pointer;}
-.drop-zone.dragover{border-color:#e94560;color:#e94560;background:#1e0818;}
-.drop-zone.has-imgs{border-color:#1a4a2a;background:#0a180e;}
+.drop-zone.dragover{border-color:var(--accent);color:var(--accent);background:var(--bg2);}
+.drop-zone.has-imgs{border-color:var(--green);background:var(--bg2);}
 .img-queue{display:flex;flex-wrap:wrap;gap:5px;padding:5px 0 2px;}
 .img-thumb{position:relative;}
 .img-thumb img{width:52px;height:52px;object-fit:cover;border-radius:4px;border:2px solid #1a4a2a;display:block;}
@@ -883,8 +883,16 @@ body.light .comm-pending-file{background:var(--bg3);}
       </div>
       <div class="comm-status" id="comm-st" data-i18n="comm_connecting">Connecting...</div>
       <div id="comm-box"></div>
+      <div id="comm-pending-file" style="display:none;" class="comm-pending-file">
+        <span id="comm-pf-icon">📄</span>
+        <span id="comm-pf-name" style="flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;"></span>
+        <span id="comm-pf-size" style="color:var(--text4);font-size:9px;margin-left:4px;"></span>
+        <button onclick="clearCommFile()">×</button>
+      </div>
       <div class="comm-row">
-        <input id="comm-in" type="text" data-i18n-ph="comm_ph" placeholder="Message everyone..." onkeydown="if(event.key==='Enter')sendComm()" maxlength="500">
+        <input type="file" id="comm-file-input" style="display:none" onchange="handleCommFile(event)">
+        <button class="comm-attach-btn" onclick="document.getElementById('comm-file-input').click()" title="Прикрепить файл">📎</button>
+        <input id="comm-in" type="text" data-i18n-ph="comm_ph" placeholder="Сообщение всем..." onkeydown="if(event.key==='Enter')sendComm()" maxlength="500">
         <button class="comm-send" onclick="sendComm()">↑</button>
       </div>
     </div>
@@ -1021,6 +1029,14 @@ body.light .comm-pending-file{background:var(--bg3);}
 </div>
 
 <script>
+// AbortSignal.timeout polyfill for older browsers
+if (!AbortSignal.timeout) {
+  AbortSignal.timeout = (ms) => {
+    const ctrl = new AbortController();
+    setTimeout(() => ctrl.abort(), ms);
+    return ctrl.signal;
+  };
+}
 // ═══════════════════════════════════════════
 //  TRANSLATIONS
 // ═══════════════════════════════════════════
@@ -1283,7 +1299,6 @@ async function kvLoadUD(username){
 const AV_COLORS = ['av-red','av-purple','av-blue','av-green','av-orange','av-pink','av-cyan','av-lime'];
 // Admin usernames (lowercase) — add yours here
 const ADMIN_USERS = ['nigga','admin','owner'];
-function isAdmin(u){ return ADMIN_USERS.includes((u||'').toLowerCase()); }
 function autoColor(u){ let h=0; for(let i=0;i<u.length;i++) h+=u.charCodeAt(i); return AV_COLORS[h%AV_COLORS.length]; }
 function initials(u){ return u.slice(0,2).toUpperCase(); }
 
@@ -1840,9 +1855,10 @@ function updateApiStatus() {
   }
 }
 
-// Groq model mapping (exact Groq API model IDs)
+// Groq model mapping — verified working IDs (2026)
+// Full list: https://console.groq.com/docs/models
 const GROQ_MODELS = {
-  // Use Groq native models directly where available
+  // Native Groq models (fastest)
   'llama-4-maverick':  'meta-llama/llama-4-maverick-17b-128e-instruct',
   'llama-4-scout':     'meta-llama/llama-4-scout-17b-16e-instruct',
   'llama-3.3-70b':     'llama-3.3-70b-versatile',
@@ -1850,16 +1866,13 @@ const GROQ_MODELS = {
   'llama-3.1-8b':      'llama-3.1-8b-instant',
   'mixtral-8x7b':      'mixtral-8x7b-32768',
   'mistral-saba':      'mistral-saba-24b',
-  'mistral-large':     'mistral-large-2411',
   'deepseek-r1':       'deepseek-r1-distill-llama-70b',
   'deepseek-r1-0528':  'deepseek-r1-distill-llama-70b',
   'qwq-32b':           'qwen-qwq-32b',
-  'qwen-2.5-72b':      'qwen-qwq-32b',
-  'qwen-2.5-coder':    'qwen-qwq-32b',
   'gemma-3-27b':       'gemma2-9b-it',
   'gemma-3-12b':       'gemma2-9b-it',
   'gemma-3-4b':        'gemma2-9b-it',
-  // Fallback for non-Groq models: use best available
+  // Non-Groq models → best available Groq equivalent
   'gpt-4o':            'llama-3.3-70b-versatile',
   'gpt-4o-mini':       'llama-3.1-8b-instant',
   'o1-mini':           'deepseek-r1-distill-llama-70b',
@@ -1871,7 +1884,10 @@ const GROQ_MODELS = {
   'gemini-2.5-pro':    'llama-3.3-70b-versatile',
   'gemini-2.5-flash':  'llama-3.1-70b-versatile',
   'mistral-nemo':      'mistral-saba-24b',
+  'mistral-large':     'llama-3.3-70b-versatile',
   'deepseek-v3':       'llama-3.3-70b-versatile',
+  'qwen-2.5-72b':      'qwen-qwq-32b',
+  'qwen-2.5-coder':    'qwen-qwq-32b',
   'phi-4':             'llama-3.1-8b-instant',
   'phi-4-mini':        'llama-3.1-8b-instant',
   'command-r-plus':    'llama-3.3-70b-versatile',
@@ -1909,16 +1925,18 @@ async function callAI(msgs, model) {
       const r = await fetch('https://api.groq.com/openai/v1/chat/completions', {
         method: 'POST',
         headers: {'Content-Type':'application/json', 'Authorization':'Bearer '+keys.groq},
-        body: JSON.stringify({model: groqModel, messages: textOnlyMsgs(msgs), max_tokens: 4096})
+        body: JSON.stringify({model: groqModel, messages: textOnlyMsgs(msgs), max_tokens: 8192, temperature: 0.7})
       });
       if (r.ok) {
         const j = await r.json();
         const txt = extractText(j);
         if (txt && txt.trim()) return txt.trim();
       } else {
-        const e = await r.json().catch(()=>({}));
+        const errBody = await r.json().catch(()=>({}));
+        const errMsg = errBody?.error?.message || '';
         if (r.status === 401) throw new Error('Groq: неверный API ключ. Проверь в Настройках.');
-        errors.push('Groq: HTTP ' + r.status);
+        if (r.status === 400) errors.push('Groq: модель не поддерживается (' + groqModel + ')');
+        else errors.push('Groq: HTTP ' + r.status + ' ' + errMsg.slice(0,60));
       }
     } catch(e) { if(e.message.includes('ключ')) throw e; errors.push(e.message); }
   }
@@ -1940,19 +1958,17 @@ async function callAI(msgs, model) {
     } catch(e) { errors.push('OpenRouter: '+e.message); }
   }
 
-  // ── 3. CEREBRAS (free, no key needed, very fast) ──────────────────
+  // ── 3. CEREBRAS (free via Pollinations cerebras model) ────────────
   try {
-    const r = await fetch('https://api.cerebras.ai/v1/chat/completions', {
-      method: 'POST',
-      headers: {'Content-Type':'application/json','Authorization':'Bearer csk-demo'},
-      body: JSON.stringify({model:'llama-3.3-70b', messages: textOnlyMsgs(msgs), max_tokens: 2048})
-    });
+    const params = new URLSearchParams({model:'openai', seed: String(Math.floor(Math.random()*99999))});
+    const lastU = textOnlyMsgs(msgs).filter(m=>m.role==='user').pop();
+    const cp = lastU?.content || 'Hello';
+    const r = await fetch('https://text.pollinations.ai/' + encodeURIComponent(cp) + '?' + params, {signal: AbortSignal.timeout(15000)});
     if (r.ok) {
-      const j = await r.json();
-      const txt = extractText(j);
-      if (txt && txt.trim()) return txt.trim();
-    } else errors.push('Cerebras: HTTP ' + r.status);
-  } catch(e) { errors.push('Cerebras: '+e.message); }
+      const txt = await r.text();
+      if (txt && txt.trim().length > 2 && !txt.includes('<!DOCTYPE')) return txt.trim();
+    } else errors.push('Pollinations-2: HTTP ' + r.status);
+  } catch(e) { errors.push('Pollinations-2: '+e.message); }
 
   // ── 4. POLLINATIONS — GET (most reliable endpoint) ────────────────
   const pollModel = POLL_MODELS[model] || 'openai';
@@ -2095,8 +2111,8 @@ async function genImg(){
   document.getElementById('img-res').innerHTML='<div class="ph-img">⏳ Please wait...</div>';
   const sz=document.getElementById('poll-s').value.split('x');
   const seed=Math.floor(Math.random()*999999);
-  const enhance = document.getElementById('img-enhance')?.checked !== false;
-  const nologo  = document.getElementById('img-nologo')?.checked !== false;
+  const enhanceEl = document.getElementById('img-enhance'); const enhance = enhanceEl ? enhanceEl.checked : true;
+  const nologoEl = document.getElementById('img-nologo'); const nologo = nologoEl ? nologoEl.checked : true;
   lastImgUrl=`https://image.pollinations.ai/prompt/${encodeURIComponent(p)}?model=${imgModel2}&width=${sz[0]}&height=${sz[1]}&seed=${seed}${nologo?'&nologo=true':''}${enhance?'&enhance=true':''}`
   const img=new Image();
   img.onload=()=>{
@@ -2127,7 +2143,7 @@ const EXAMPLES={
   javascript:`console.log("Hello World!");\nconst nums = [1,2,3,4,5];\nconsole.log("Sum:", nums.reduce((a,b)=>a+b,0));\nconsole.log("Squares:", nums.map(n=>n*n));\nnums.forEach(n => console.log("  " + "★".repeat(n)));`,
   html:`<!DOCTYPE html>\n<html><head><style>\nbody{background:#0a0a14;color:#e8e8f0;font-family:sans-serif;display:flex;align-items:center;justify-content:center;height:100vh;margin:0;}\n.card{background:#141428;padding:30px;border-radius:12px;text-align:center;box-shadow:0 0 40px #e9456033;}\nh1{color:#e94560;margin-bottom:10px;}\nbutton{background:#e94560;color:#fff;border:none;padding:10px 24px;border-radius:6px;cursor:pointer;font-size:14px;}\nbutton:hover{background:#c73652;}\n</style></head><body>\n<div class="card">\n  <h1>Hello World!</h1>\n  <p>Click the button</p>\n  <button onclick="this.textContent='Clicked! ✓'">Click me</button>\n</div></body></html>`,
   css:`body{background:linear-gradient(135deg,#080810,#141428);display:flex;align-items:center;justify-content:center;height:100vh;margin:0;}\n.card{background:#0e0e20;padding:30px 40px;border-radius:12px;text-align:center;box-shadow:0 0 40px #e9456033;border:1px solid #2a2a4a;}\nh1{color:#e94560;font-family:'Courier New',monospace;}\n.dot{width:10px;height:10px;background:#e94560;border-radius:50%;display:inline-block;margin:8px 3px 0;animation:p 1s infinite;}\n@keyframes p{0%,100%{opacity:1;transform:scale(1);}50%{opacity:.4;transform:scale(1.4);}}`,
-  json:`{\n  "app": "ALLAI",\n  "version": "11.0",\n  "features": [\n    "AI Chat",\n    "Image Generator",\n    "Compiler + REPL",\n    "Git Simulator",\n    "Community Chat",\n    "Settings + i18n"\n  ],\n  "languages": ["en", "ru", "de"],\n  "accounts": "cloud-synced"\n}`
+  json:`{\n  "app": "ALLAI",\n  "version": "13.0",\n  "features": [\n    "AI Chat",\n    "Image Generator",\n    "Compiler + REPL",\n    "Git Simulator",\n    "Community Chat",\n    "Settings + i18n"\n  ],\n  "languages": ["en", "ru", "de"],\n  "accounts": "cloud-synced"\n}`
 };
 const LANG_META={
   python:    {name:'Python',    color:'#3776ab',pr:'>>> ',prCls:'',    btnCls:''},
