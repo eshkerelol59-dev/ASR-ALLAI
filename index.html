@@ -1549,18 +1549,17 @@ function getSysPr(){ if(currentMode==='custom'){ return document.getElementById(
 //  MODELS
 // ═══════════════════════════════════════════
 const ALL_MODELS=[
-  // ── Groq native — 100% работают с ключом ──
-  {id:'llama-4-maverick', name:'Llama 4 Maverick',  provider:'Meta',    badge:'m-meta',   note:'⚡ новый'},
-  {id:'llama-4-scout',    name:'Llama 4 Scout',     provider:'Meta',    badge:'m-meta',   note:'⚡ быстрый'},
-  {id:'llama-3.3-70b',    name:'Llama 3.3 70B',     provider:'Meta',    badge:'m-meta',   note:'⚡ умный'},
-  {id:'llama-3.1-8b',     name:'Llama 3.1 8B',      provider:'Meta',    badge:'m-meta',   note:'⚡ мгновенный'},
-  {id:'mixtral-8x7b',     name:'Mixtral 8x7B',      provider:'Mistral', badge:'m-other',  note:'⚡ мощный'},
-  {id:'mistral-saba',     name:'Mistral Saba 24B',  provider:'Mistral', badge:'m-other',  note:'⚡ новый'},
-  {id:'deepseek-r1',      name:'DeepSeek R1',       provider:'DeepSeek',badge:'m-other',  note:'⚡ рассуждения'},
-  {id:'deepseek-r1-0528', name:'DeepSeek R1 0528',  provider:'DeepSeek',badge:'m-other',  note:'⚡ последний'},
-  {id:'qwq-32b',          name:'QwQ 32B',           provider:'Alibaba', badge:'m-other',  note:'⚡ логика'},
-  {id:'gemma-3-27b',      name:'Gemma 3 27B',       provider:'Google',  badge:'m-google', note:'⚡ Google'},
-  {id:'gemma-3-4b',       name:'Gemma 3 4B',        provider:'Google',  badge:'m-google', note:'⚡ мини'},
+  {id:'llama-4-maverick', name:'Llama 4 Maverick',  provider:'Meta',    badge:'m-meta'},
+  {id:'llama-4-scout',    name:'Llama 4 Scout',     provider:'Meta',    badge:'m-meta'},
+  {id:'llama-3.3-70b',    name:'Llama 3.3 70B',     provider:'Meta',    badge:'m-meta'},
+  {id:'llama-3.1-70b',    name:'Llama 3.1 70B',     provider:'Meta',    badge:'m-meta'},
+  {id:'llama-3.1-8b',     name:'Llama 3.1 8B',      provider:'Meta',    badge:'m-meta'},
+  {id:'mixtral-8x7b',     name:'Mixtral 8x7B',      provider:'Mistral', badge:'m-other'},
+  {id:'mistral-saba',     name:'Mistral Saba 24B',  provider:'Mistral', badge:'m-other'},
+  {id:'deepseek-r1',      name:'DeepSeek R1',       provider:'DeepSeek',badge:'m-other'},
+  {id:'deepseek-r1-0528', name:'DeepSeek R1 0528',  provider:'DeepSeek',badge:'m-other'},
+  {id:'qwq-32b',          name:'QwQ 32B',           provider:'Alibaba', badge:'m-other'},
+  {id:'gemma-3-4b',       name:'Gemma 3 4B',        provider:'Google',  badge:'m-google'},
 ];
 let ratings={}, currentSort='rating', selectedModel=ALL_MODELS[0].id, mlOpen=false;
 
