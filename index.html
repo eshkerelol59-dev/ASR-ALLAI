@@ -1559,7 +1559,6 @@ const ALL_MODELS=[
   {id:'deepseek-r1',      name:'DeepSeek R1',       provider:'DeepSeek',badge:'m-other'},
   {id:'deepseek-r1-0528', name:'DeepSeek R1 0528',  provider:'DeepSeek',badge:'m-other'},
   {id:'qwq-32b',          name:'QwQ 32B',           provider:'Alibaba', badge:'m-other'},
-  {id:'gemma-3-4b',       name:'Gemma 3 4B',        provider:'Google',  badge:'m-google'},
 ];
 let ratings={}, currentSort='rating', selectedModel=ALL_MODELS[0].id, mlOpen=false;
 
@@ -1835,9 +1834,6 @@ const GROQ_MODELS = {
   'qwq-32b':           'llama-3.3-70b-versatile',   // qwen not on Groq → llama fallback
   'qwen-2.5-72b':      'llama-3.3-70b-versatile',
   'qwen-2.5-coder':    'llama-3.3-70b-versatile',
-  'gemma-3-27b':       'gemma2-9b-it',
-  'gemma-3-12b':       'gemma2-9b-it',
-  'gemma-3-4b':        'gemma2-9b-it',
   // Non-Groq → best Groq equivalent
   'gpt-4o':            'llama-3.3-70b-versatile',
   'gpt-4o-mini':       'llama-3.1-8b-instant',
